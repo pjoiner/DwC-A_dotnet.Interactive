@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>DwC_A_dotnet.Interactive</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Copyright © Paul Joiner 2021</Copyright>
+    <PackageProjectUrl>https://github.com/pjoiner/DwC-A_dotnet.Interactive</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/pjoiner/DwC-A_dotnet.Interactive</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageTags>DwC-A darwin-core Biodiversity</PackageTags>
+    <Authors>Paul Joiner</Authors>
+    <Company>Paul Joiner</Company>
+    <Version>0.1.0-Pre</Version>
+    <Description>.NET Interactive Extensions for Darwin Core Archive file reader</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DwC-A_dotnet" Version="0.5.1" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-*" />
+    <PackageReference Include="microsoft.dotnet.interactive" Version="*-*" />
+    <PackageReference Include="microsoft.dotnet.interactive.csharp" Version="*-*" />
+  </ItemGroup>
+
+</Project>
