@@ -26,5 +26,5 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.2
       with:
-        name: DwC-A_dotnet.Interactive.*.nupkg
+        name: DwC-A_dotnet.Interactive.nupkg
         path: src/DwC-A_dotnet.Interactive/bin/Debug/DwC-A_dotnet.Interactive.*.nupkg
