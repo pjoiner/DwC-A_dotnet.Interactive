@@ -22,4 +22,7 @@
     <PackageReference Include="microsoft.dotnet.interactive.csharp" Version="*-*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="$(OutputPath)/DwC-A_dotnet.Interactive.dll" Pack="true" PackagePath="interactive-extensions/dotnet" />
+  </ItemGroup>
 </Project>
