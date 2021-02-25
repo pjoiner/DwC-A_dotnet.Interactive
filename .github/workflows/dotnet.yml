@@ -27,4 +27,4 @@ jobs:
       uses: actions/upload-artifact@v2.2.2
       with:
         name: DwC-A_dotnet.Interactive.0.1.0-Pre.nupkg
-        path: DwC-A_dotnet.Interactive/DwC-A_dotnet.Interactive/src/DwC-A_dotnet.Interactive/bin/Debug/DwC-A_dotnet.Interactive.0.1.0-Pre.nupkg
+        path: src/DwC-A_dotnet.Interactive/bin/Debug/DwC-A_dotnet.Interactive.0.1.0-Pre.nupkg
