@@ -23,8 +23,8 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Upload dotnet build artifacts
-      uses: actions/upload-artifact@v2
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.2
       with:
-        name: bin/Debug/DwC-A_dotnet.Interactive.0.1.0-Pre.nupkg
-        path: artifacts
+        name: DwC-A_dotnet.Interactive.nupkg
+        path: src/DwC-A_dotnet.Interactive/bin/Debug/DwC-A_dotnet.Interactive.*.nupkg
