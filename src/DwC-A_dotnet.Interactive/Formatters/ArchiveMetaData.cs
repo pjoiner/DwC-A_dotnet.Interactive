@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿extern alias Core;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Html;
 using Microsoft.DotNet.Interactive.Formatting;
 using System.IO;
-using DwC_A.Meta;
+using Core.DwC_A.Meta;
 
-namespace DwC_A_dotnet.Interactive.Formatters
+namespace DwC_A.Interactive.Formatters
 {
     public class ArchiveMetaData
     {

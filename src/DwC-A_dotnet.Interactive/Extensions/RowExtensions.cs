@@ -1,18 +1,19 @@
-﻿using DwC_A;
-using DwC_A.Terms;
+﻿extern alias Core;
 using System.Collections.Generic;
 using System.Dynamic;
+using Core.DwC_A;
+using Core.DwC_A.Terms;
 
-namespace DwC_A_dotnet.Interactive.Extensions
+namespace DwC_A.Interactive.Extensions
 {
-    public static class RowExtensions
+    internal static class RowExtensions
     {
         public static dynamic ToDynamic(this IRow row)
         {
             dynamic dynamicObj = new ExpandoObject();
 
             var underlyingDictionary = dynamicObj as IDictionary<string, object>;
-            foreach(var field in row.FieldMetaData)
+            foreach (var field in row.FieldMetaData)
             {
                 underlyingDictionary.Add(Terms.ShortName(field.Term), row[field.Term]);
             }

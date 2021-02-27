@@ -1,13 +1,14 @@
-﻿using DwC_A;
-using DwC_A.Terms;
+﻿extern alias Core;
 using Microsoft.AspNetCore.Html;
 using Microsoft.DotNet.Interactive.Formatting;
 using System.Collections.Generic;
 using System.IO;
+using Core.DwC_A;
+using Core.DwC_A.Terms;
 
-namespace DwC_A_dotnet.Interactive.Formatters
+namespace DwC_A.Interactive.Formatters
 {
-    public class FileReaderMetaData
+    internal class FileReaderMetaData
     {
         public static void Register(IFileReader fileReader, TextWriter writer)
         {

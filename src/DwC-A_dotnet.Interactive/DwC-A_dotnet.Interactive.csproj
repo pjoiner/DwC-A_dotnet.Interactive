@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>DwC_A_dotnet.Interactive</RootNamespace>
+    <RootNamespace>DwC_A.Interactive</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Copyright © Paul Joiner 2021</Copyright>
     <PackageProjectUrl>https://github.com/pjoiner/DwC-A_dotnet.Interactive</PackageProjectUrl>
@@ -17,7 +17,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DwC-A_dotnet" Version="0.5.1" />
+    <PackageReference Include="DwC-A_dotnet" Version="0.5.1">
+      <Aliases>Core</Aliases>
+    </PackageReference>
     <PackageReference Include="System.CommandLine" Version="2.0.0-*" />
     <PackageReference Include="microsoft.dotnet.interactive" Version="*-*" />
   </ItemGroup>

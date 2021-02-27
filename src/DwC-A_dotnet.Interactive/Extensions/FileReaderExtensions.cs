@@ -1,4 +1,6 @@
-﻿using DwC_A;
+﻿extern alias Core;
+using Core.DwC_A;
+using DwC_A.Interactive.Extensions;
 using System.Collections.Generic;
 
 namespace DwC_A_dotnet.Interactive.Extensions
