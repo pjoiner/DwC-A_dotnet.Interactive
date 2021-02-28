@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<archive xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://rs.tdwg.org/dwc/text/" metadata="eml.xml">
+  <core linesTerminatedBy="\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/Taxon" encoding="UTF-8" dateFormat="YYYY-MM-DD">
+    <files>
+      <location>taxon.txt</location>
+    </files>
+    <id index="0" />
+    <field index="0" term="http://rs.tdwg.org/dwc/terms/taxonID" />
+    <field index="1" term="http://rs.tdwg.org/dwc/terms/vernacularName" />
+    <field index="2" term="http://purl.org/dc/terms/language" />
+  </core>
+</archive>

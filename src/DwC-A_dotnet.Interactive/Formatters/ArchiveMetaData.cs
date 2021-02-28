@@ -8,7 +8,7 @@ using Core.DwC_A.Meta;
 
 namespace DwC_A.Interactive.Formatters
 {
-    public class ArchiveMetaData
+    internal class ArchiveMetaData
     {
         public static void Register(Archive archive, TextWriter writer)
         {
@@ -25,17 +25,22 @@ namespace DwC_A.Interactive.Formatters
                 PocketViewTags.td(Path.GetFileName(archive.Core.Files.FirstOrDefault())),
                 PocketViewTags.td(archive.Core.RowType)
             }));
+            rows.Add(PocketViewTags.tr(new[]
+            {
+                PocketViewTags.td(new HtmlString("<b>Metadata:</b>")),
+                PocketViewTags.td(archive.Metadata)
+            }));
             rows.AddRange(archive.Extension
                     .Select(e =>
                         PocketViewTags.tr(new[]
-                            {
-                PocketViewTags.td(new HtmlString("<b>Extension:</b>")),
-                PocketViewTags.td(Path.GetFileName(e.Files.FirstOrDefault())),
-                PocketViewTags.td(e.RowType)
-                            })));
+                        {
+                            PocketViewTags.td(new HtmlString("<b>Extension:</b>")),
+                            PocketViewTags.td(Path.GetFileName(e.Files.FirstOrDefault())),
+                            PocketViewTags.td(e.RowType)
+                        })));
             var t = PocketViewTags.table(
-                PocketViewTags.thead(header),
-                PocketViewTags.tbody(rows));
+                        PocketViewTags.thead(header),
+                        PocketViewTags.tbody(rows));
             writer.Write(t);
         }
     }

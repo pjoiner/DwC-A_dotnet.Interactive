@@ -11,9 +11,9 @@
     <PackageTags>DwC-A darwin-core Biodiversity</PackageTags>
     <Authors>Paul Joiner</Authors>
     <Company>Paul Joiner</Company>
-    <Version>0.1.2-Pre</Version>
+    <Version>0.1.3-Pre</Version>
     <Description>.NET Interactive Extensions for Darwin Core Archive file reader</Description>
-    <AssemblyVersion>0.1.2.0</AssemblyVersion>
+    <AssemblyVersion>0.1.3.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +24,12 @@
     <PackageReference Include="microsoft.dotnet.interactive" Version="*-*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <_Parameter1>UnitTests</_Parameter1>
+    </AssemblyAttribute>    
+  </ItemGroup>
+  
   <ItemGroup>
     <None Include="$(OutputPath)/DwC-A_dotnet.Interactive.dll" Pack="true" PackagePath="interactive-extensions/dotnet" />
   </ItemGroup>
