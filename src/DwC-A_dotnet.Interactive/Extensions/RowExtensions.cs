@@ -6,7 +6,7 @@ using Core.DwC_A.Terms;
 
 namespace DwC_A.Interactive.Extensions
 {
-    internal static class RowExtensions
+    public static class RowExtensions
     {
         public static dynamic ToDynamic(this IRow row)
         {
