@@ -10,7 +10,7 @@ namespace UnitTests
         [Fact]
         public void ShouldNotThrowOnDuplicates()
         {
-            using(var archive = new ArchiveReader("./resources/whales"))
+            using(var archive = new ArchiveReader("./Resources/whales"))
             {
                 var dynCore = archive.CoreFile.ToDynamic();
                 Assert.NotNull(dynCore.First().language1);
