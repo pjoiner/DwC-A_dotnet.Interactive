@@ -3,6 +3,8 @@ using DwC_A;
 using DwC_A.Interactive.Formatters;
 using System.IO;
 
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
+
 namespace UnitTests
 {
     public class ArchiveReaderTests
