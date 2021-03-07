@@ -11,9 +11,9 @@
     <PackageTags>DwC-A darwin-core Biodiversity</PackageTags>
     <Authors>Paul Joiner</Authors>
     <Company>Paul Joiner</Company>
-    <Version>0.1.4-Pre</Version>
+    <Version>0.1.5-Pre</Version>
     <Description>.NET Interactive Extensions for Darwin Core Archive file reader</Description>
-    <AssemblyVersion>0.1.4.0</AssemblyVersion>
+    <AssemblyVersion>0.1.5.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
