@@ -24,12 +24,12 @@ namespace DwC_A.Interactive.Formatters
             foreach (var field in fileReader.FileMetaData.Fields)
             {
                 var row = PocketViewTags.tr(new[]
-                    {
-            PocketViewTags.td(field.Index),
-            PocketViewTags.td(Terms.ShortName(field.Term)),
-            PocketViewTags.td(field.Term),
-            PocketViewTags.td(field.Vocabulary)
-            });
+                {
+                    PocketViewTags.td(field.Index),
+                    PocketViewTags.td(Terms.ShortName(field.Term)),
+                    PocketViewTags.td(field.Term),
+                    PocketViewTags.td(field.Vocabulary)
+                });
                 rows.Add(row);
             }
             var t = PocketViewTags.table(

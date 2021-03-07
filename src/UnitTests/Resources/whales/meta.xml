@@ -8,5 +8,6 @@
     <field index="0" term="http://rs.tdwg.org/dwc/terms/taxonID" />
     <field index="1" term="http://rs.tdwg.org/dwc/terms/vernacularName" />
     <field index="2" term="http://purl.org/dc/terms/language" />
+    <field index="3" term="http://example.com/language" />
   </core>
 </archive>
