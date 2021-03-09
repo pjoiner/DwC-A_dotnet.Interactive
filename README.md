@@ -1,4 +1,4 @@
-# DwC-A_dotnet.Interactive
+# DwC-A_dotnet.Interactive [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 .NET Interactive Extensions for Darwin Core Archive file reader
 
