@@ -1,11 +1,8 @@
 ﻿extern alias Core;
-
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Xml;
-using System.Xml.XPath;
 using Core.DwC_A.Terms;
 using Microsoft.AspNetCore.Html;
 using Microsoft.DotNet.Interactive.Formatting;
