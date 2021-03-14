@@ -14,6 +14,7 @@ namespace DwC_A.Interactive
         {
             Formatter.Register<Archive>(ArchiveMetaData.Register, "text/html");
             Formatter.Register<IFileReader>(FileReaderMetaData.Register, "text/html");
+            Formatter.Register<DefaultTerms>(TermsFormatter.Register, "text/html");
 
             return Task.CompletedTask;
         }

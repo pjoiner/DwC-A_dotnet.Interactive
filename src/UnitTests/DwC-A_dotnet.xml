@@ -1,0 +1,2521 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DwC-A_dotnet</name>
+    </assembly>
+    <members>
+        <member name="M:DwC_A.ArchiveFolder.#ctor(System.String,DwC_A.Config.ArchiveFolderConfiguration)">
+            <summary>
+            Extracts archive to a folder
+            </summary>
+            <param name="fileName">Zip archive file name</param>
+            <param name="config"><see cref="T:DwC_A.Config.ArchiveFolderConfiguration"/></param>
+        </member>
+        <member name="T:DwC_A.ArchiveReader">
+            <summary>
+            Reads a Darwin Core archive zip file or directory contents
+            </summary>
+        </member>
+        <member name="P:DwC_A.ArchiveReader.FileName">
+            <summary>
+            Relative or absolute path name for the archive file if one was specified in the constructor or null
+            </summary>
+        </member>
+        <member name="P:DwC_A.ArchiveReader.OutputPath">
+            <summary>
+            Path where archive is extracted to or the path specified in the constructor
+            </summary>
+        </member>
+        <member name="P:DwC_A.ArchiveReader.MetaData">
+            <summary>
+            Raw meta data for archive
+            </summary>
+        </member>
+        <member name="P:DwC_A.ArchiveReader.CoreFile">
+            <summary>
+            File reader for Core file
+            </summary>
+        </member>
+        <member name="M:DwC_A.ArchiveReader.GetAsyncCoreFile">
+            <summary>
+            Async File reader for Core file
+            </summary>
+            <returns>Async File reader</returns>
+        </member>
+        <member name="P:DwC_A.ArchiveReader.Extensions">
+            <summary>
+            Collection of file readers for extension files
+            </summary>
+        </member>
+        <member name="M:DwC_A.ArchiveReader.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="archivePath">Relative or absolute file name for archive file or
+            the name of a directory containing the extracted archive files
+            </param>
+        </member>
+        <member name="M:DwC_A.ArchiveReader.#ctor(System.String,DwC_A.Factories.IAbstractFactory)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="archivePath">Fully qualified file name for archive file</param>
+            <param name="abstractFactory">Factory to create tokenizers, readers etc.</param>
+        </member>
+        <member name="M:DwC_A.ArchiveReader.Delete">
+            <summary>
+            Used to cleanup extracted files.
+            </summary>
+        </member>
+        <member name="T:DwC_A.Writers.ArchiveWriter">
+            <summary>
+            Writes data and compresses files to build an archive.
+            </summary>
+        </member>
+        <member name="M:DwC_A.Writers.ArchiveWriter.CoreFile(DwC_A.Builders.FileBuilder,DwC_A.Meta.CoreFileMetaDataBuilder)">
+            <summary>
+            Creates an archive writer to build and compress files.
+            </summary>
+            <param name="coreFileBuilder">FileBuilder for the core file.</param>
+            <param name="coreFileMetaDataBuilder">Metadata builder for the core file.</param>
+            <returns>ArchiveWriter</returns>
+        </member>
+        <member name="M:DwC_A.Writers.ArchiveWriter.AddExtensionFile(DwC_A.Builders.FileBuilder,DwC_A.Meta.ExtensionFileMetaDataBuilder)">
+            <summary>
+            Adds the FileBuilder and metadata builder for an extension file.
+            </summary>
+            <param name="extension">Extension FileBuilder</param>
+            <param name="extensionFileMetaDataBuilder">Extension metadata builder</param>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Writers.ArchiveWriter.Context(DwC_A.Builders.BuilderContext)">
+            <summary>
+            Pass a directory context to determine where files are written.  If no context is passed then a default context will be used in a temporary directory.
+            </summary>
+            <param name="context">Directory context</param>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Writers.ArchiveWriter.AddExtraFile(System.String)">
+            <summary>
+            Add any extra files, such as, eml.xml or license.txt using this method.
+            </summary>
+            <param name="fileName">Absolute or relative path to file</param>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Writers.ArchiveWriter.Build(System.String)">
+            <summary>
+            Builds the file.
+            </summary>
+            <param name="archiveFileName">Pass filename only</param>
+        </member>
+        <member name="M:DwC_A.FileReaderCollection.GetAsyncFileReaders">
+            <summary>
+            Retrieves all the asyncronous file readers
+            </summary>
+            <returns>Enumerable of IAsyncFileReader</returns>
+        </member>
+        <member name="M:DwC_A.FileReaderCollection.GetAsyncFileReaderByFileName(System.String)">
+            <summary>
+            Retrieves an IAsyncFileReader for the specified file name
+            </summary>
+            <param name="fileName">Name of the file in the archive (e.g. taxon.txt)</param>
+            <returns>IAsyncFileReader</returns>
+            <exception cref="T:DwC_A.Exceptions.FileReaderNotFoundException"/>
+        </member>
+        <member name="M:DwC_A.FileReaderCollection.GetAsyncFileReadersByRowType(System.String)">
+            <summary>
+            Returns a list of IAsyncFileReaders of a given row type
+            </summary>
+            <param name="rowType">Fully qualified name of the row type. <seealso cref="T:DwC_A.Terms.RowTypes"/></param>
+            <returns>IEnumerable list of IAsyncFileReaders of rowType</returns>
+        </member>
+        <member name="M:DwC_A.FileReaderCollection.GetFileReaders">
+            <summary>
+            Retrieves all the synchronous file readers
+            </summary>
+            <returns>Enumerable of IFileReader</returns>
+        </member>
+        <member name="M:DwC_A.FileReaderCollection.GetFileReaderByFileName(System.String)">
+            <summary>
+            Retrieves an IFileReader for the specified file name
+            </summary>
+            <param name="fileName">Name of the file in the archive (e.g. taxon.txt)</param>
+            <returns>IFileReader</returns>
+            <exception cref="T:DwC_A.Exceptions.FileReaderNotFoundException"/>
+        </member>
+        <member name="M:DwC_A.FileReaderCollection.GetFileReadersByRowType(System.String)">
+            <summary>
+            Returns a list of IFileReaders of a given row type
+            </summary>
+            <param name="rowType">Fully qualified name of the row type. <seealso cref="T:DwC_A.Terms.RowTypes"/></param>
+            <returns>IEnumerable list of IFileReaders of rowType</returns>
+        </member>
+        <member name="T:DwC_A.IAsyncFileReader">
+            <summary>
+            Reads a file
+            </summary>
+        </member>
+        <member name="P:DwC_A.IAsyncFileReader.FileName">
+            <summary>
+            Fully qualified path to file
+            </summary>
+        </member>
+        <member name="P:DwC_A.IAsyncFileReader.FileMetaData">
+            <summary>
+            Collection of metadata for file
+            </summary>
+        </member>
+        <member name="M:DwC_A.IAsyncFileReader.GetDataRowsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Enumerable collection of data row objects
+            </summary>
+            <param name="ct">Cancellation Token</param>
+        </member>
+        <member name="M:DwC_A.IAsyncFileReader.GetHeaderRowsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Enumerable collection of header row objects
+            </summary>
+            <param name="ct">Cancellation Token</param>
+        </member>
+        <member name="M:DwC_A.IAsyncFileReader.GetRowsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Enumerable collection of all row objects including headers and data
+            </summary>
+            <param name="ct">Cancellation Token</param>
+        </member>
+        <member name="T:DwC_A.Builders.BuilderContext">
+            <summary>
+            A directory context where files should be written while building an archive.
+            The default context may be used to assemble files in a temporary directory which will be cleaned up after the archive is compressed.
+            </summary>
+        </member>
+        <member name="M:DwC_A.Builders.BuilderContext.#ctor(System.String,System.Boolean)">
+            <summary>
+            Constructor for custom context.  To use a temporary directory to assemble files use the static Default property.
+            </summary>
+            <param name="path">Provide the absolute path to a folder where the archive files will be written.</param>
+            <param name="shouldCleanup">If set to true then the folder will be deleted after the archive is written.</param>
+        </member>
+        <member name="P:DwC_A.Builders.BuilderContext.Default">
+            <summary>
+            Returns a default context that uses a temporary directory.
+            </summary>
+        </member>
+        <member name="P:DwC_A.Builders.BuilderContext.Path">
+            <summary>
+            Returns the absolute path that will be used to write and assemble files.
+            </summary>
+        </member>
+        <member name="P:DwC_A.Builders.BuilderContext.ShouldCleanup">
+            <summary>
+            When set to true then the folder will be deleted after the archive is written.
+            </summary>
+        </member>
+        <member name="M:DwC_A.Builders.BuilderContext.Cleanup">
+            <summary>
+            Call this method to delete the folder after the archive has be compressed.
+            </summary>
+        </member>
+        <member name="T:DwC_A.Builders.FileBuilder">
+            <summary>
+            This class is used to write data to a file including header information.
+            </summary>
+        </member>
+        <member name="P:DwC_A.Builders.FileBuilder.FileName">
+            <summary>
+            Filename of file.
+            </summary>
+        </member>
+        <member name="P:DwC_A.Builders.FileBuilder.FullFileName">
+            <summary>
+            Full filename of file include path.
+            </summary>
+        </member>
+        <member name="M:DwC_A.Builders.FileBuilder.MetaData(DwC_A.Meta.IFileMetaData)">
+            <summary>
+            Use this method to create new FileBuilder object with supplied metadata
+            </summary>
+            <param name="fileMetaData"></param>
+            <returns>New FileBuilder</returns>
+        </member>
+        <member name="M:DwC_A.Builders.FileBuilder.MetaData(DwC_A.Meta.CoreFileMetaDataBuilder)">
+            <summary>
+            Use this method to create new FileBuilder object with supplied metadata
+            </summary>
+            <param name="metaDataBuilder">A CoreFile metadata builder</param>
+            <returns>New FileBuilder</returns>
+        </member>
+        <member name="M:DwC_A.Builders.FileBuilder.MetaData(DwC_A.Meta.ExtensionFileMetaDataBuilder)">
+            <summary>
+            Use this method to create new FileBuilder object with supplied metadata
+            </summary>
+            <param name="metaDataBuilder">An ExtensionFile metadata builder</param>
+            <returns>New FileBuilder</returns>
+        </member>
+        <member name="M:DwC_A.Builders.FileBuilder.Context(DwC_A.Builders.BuilderContext)">
+            <summary>
+            Pass a BuilderContext object to this method to indicate where the file should be written.
+            Note: Always use the same context for all FileBuilders, MetaDataBuilder and ArchiveWriter.
+            </summary>
+            <param name="context">Context class containing path information.</param>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Builders.FileBuilder.UseExistingFile(System.String)">
+            <summary>
+            Use an existing file instead of building rows using RowBuilder.
+            </summary>
+            <param name="existingFile">Absolute or relative path of existing file</param>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Builders.FileBuilder.BuildRows(System.Func{DwC_A.Builders.RowBuilder,System.Collections.Generic.IEnumerable{System.String}})">
+            <summary>
+            Builds rows for data file.
+            </summary>
+            <param name="row">Implement a delegate or lambda to iterate through data and build rows for the file.  
+            Call yield return on the Build() method on each row using the supplied RowBuilder object.</param>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Builders.FileBuilder.Build">
+            <summary>
+            Build the file and write to disk.
+            </summary>
+            <returns>Filename of the file including the path.</returns>
+        </member>
+        <member name="T:DwC_A.Builders.RowBuilder">
+            <summary>
+            This class is generated by the FileBuilder class and passed into the BuildRows method.
+            </summary>
+        </member>
+        <member name="M:DwC_A.Builders.RowBuilder.AddField(System.Object)">
+            <summary>
+            Use this method to add a data field to a row in a file.
+            </summary>
+            <param name="field">Object containing the data to write to the field.  Uses the ToString() method of the object to write to the file.</param>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Builders.RowBuilder.Build">
+            <summary>
+            Call this method to generate a string that represents one row in the file.
+            </summary>
+        </member>
+        <member name="T:DwC_A.Config.ArchiveFolderConfiguration">
+            <summary>
+            Configuration for the internal ArchiveFolder class
+            </summary>
+        </member>
+        <member name="P:DwC_A.Config.ArchiveFolderConfiguration.OutputPath">
+            <summary>
+            Path to extract files to
+            </summary>
+        </member>
+        <member name="P:DwC_A.Config.ArchiveFolderConfiguration.ShouldCleanup">
+            <summary>
+            Set to true to delete the OutputPath and files when the ArchiveReader is disposed
+            </summary>
+        </member>
+        <member name="T:DwC_A.Config.FactoryConfiguration">
+            <summary>
+            This class is used to store various configuration objects that can be used to 
+            customize the behavior of the library.
+            </summary>
+        </member>
+        <member name="M:DwC_A.Config.FactoryConfiguration.Add``1(System.Action{``0})">
+            <summary>
+            Adds a new configuration object
+            </summary>
+            <typeparam name="T">Type of the configuration object</typeparam>
+            <param name="configOptions">A new configuration object is created and can be updated inside this lambda</param>
+        </member>
+        <member name="T:DwC_A.Config.FileReaderConfiguration">
+            <summary>
+            Used to set configuration options for file readers
+            </summary>
+        </member>
+        <member name="P:DwC_A.Config.FileReaderConfiguration.BufferSize">
+            <summary>
+            Set the size of the FileReader buffer
+            </summary>
+            <default>65536 bytes</default>
+        </member>
+        <member name="T:DwC_A.Config.RowStrategy">
+            <summary>
+            Determines the row strategy of the RowFactory
+            </summary>
+        </member>
+        <member name="F:DwC_A.Config.RowStrategy.Lazy">
+            <summary>
+            Reads fields as they are consumed.  Use this when consuming fields in index order
+            or only reading some of the fields in a row.
+            </summary>
+        </member>
+        <member name="F:DwC_A.Config.RowStrategy.Greedy">
+            <summary>
+            Parses all fields in a row and stores them in an array.  Use this strategy when
+            consuming all fields in random or reverse index order.
+            </summary>
+        </member>
+        <member name="T:DwC_A.Config.RowFactoryConfiguration">
+            <summary>
+            Configuration options for the RowFactory
+            </summary>
+        </member>
+        <member name="P:DwC_A.Config.RowFactoryConfiguration.Strategy">
+            <summary>
+            Specify which strategy to consume rows
+            </summary>
+            <seealso cref="T:DwC_A.Config.RowStrategy"/>
+            <default>RowStrategy.Lazy</default>
+        </member>
+        <member name="M:DwC_A.Extensions.StreamReaderExtensions.ReadRow(System.IO.StreamReader,DwC_A.Meta.IFileMetaData)">
+            <summary>
+            Reads a row of data from a file using the fileMetaData to determine line endings and quotes
+            </summary>
+            <param name="reader">Stream reader</param>
+            <param name="fileMetaData">File MetaData containing line ending and quotes data</param>
+            <returns>false if this is the end of the file else true</returns>
+        </member>
+        <member name="M:DwC_A.Factories.IAbstractFactory.CreateArchiveReader(System.String)">
+            <summary>
+            Creates an archive reader
+            </summary>
+            <param name="fileName">Name of archive file or directory containing extracted files</param>
+            <returns>ArchiveReader</returns>
+        </member>
+        <member name="M:DwC_A.Factories.IAbstractFactory.CreateArchiveFolder(System.String)">
+            <summary>
+            This class is used internally to manage extraction of archive zip files
+            </summary>
+            <param name="fileName">Archive zip file name</param>
+            <returns>IArchiveFolder</returns>
+        </member>
+        <member name="M:DwC_A.Factories.IAbstractFactory.CreateMetaDataReader">
+            <summary>
+            Creates a meta.xml metadata reader
+            </summary>
+            <returns>Meta data reader class</returns>
+        </member>
+        <member name="M:DwC_A.Factories.IAbstractFactory.CreateTokenizer(DwC_A.Meta.IFileMetaData)">
+            <summary>
+            Creates a line tokenizer
+            </summary>
+            <param name="fileAttributes">Metadata class containing file attributes for field separators and line terminators etc.</param>
+            <returns>Tokenizer</returns>
+        </member>
+        <member name="M:DwC_A.Factories.IAbstractFactory.CreateRowFactory">
+            <summary>
+            Creates a factory that returns IRow objects
+            </summary>
+            <returns>Row factory</returns>
+        </member>
+        <member name="M:DwC_A.Factories.IAbstractFactory.CreateFileReader(System.String,DwC_A.Meta.IFileMetaData)">
+            <summary>
+            Creates a FileReader object.  Works for both core files and extensions.
+            </summary>
+            <param name="fileName">Name of file to read</param>
+            <param name="fileMetaData">File meta data</param>
+            <returns>File reader object</returns>
+        </member>
+        <member name="M:DwC_A.Factories.IAbstractFactory.CreateCoreMetaData(DwC_A.Meta.CoreFileType)">
+            <summary>
+            Creates an object that is used to wrap CoreFileTypes and ExtensionFileTypes to a common interface
+            </summary>
+            <param name="coreFileType">CoreFileType raw meta data</param>
+            <returns>Generic IFileMetaData object</returns>
+        </member>
+        <member name="M:DwC_A.Factories.IAbstractFactory.CreateExtensionMetaData(DwC_A.Meta.ExtensionFileType)">
+            <summary>
+            Creates an object that is used to wrap CoreFileTypes and ExtensionFileTypes to a common interface
+            </summary>
+            <param name="extensionFileType">ExtensionFileType raw meta data</param>
+            <returns>Generic IFileMetaData object</returns>
+        </member>
+        <member name="T:DwC_A.IArchiveFolder">
+            <summary>
+            Interface to manage archive zip files
+            </summary>
+        </member>
+        <member name="P:DwC_A.IArchiveFolder.ShouldCleanup">
+            <summary>
+            Indicates whether the extracted folder is a temp folder that should be cleaned
+            up on disposal.
+            </summary>
+        </member>
+        <member name="M:DwC_A.IArchiveFolder.DeleteFolder">
+            <summary>
+            Deletes the folder that files were extracted to.
+            </summary>
+        </member>
+        <member name="M:DwC_A.IArchiveFolder.Extract">
+            <summary>
+            Extracts files from archive zip file
+            </summary>
+            <returns>Path that files were extracted to</returns>
+        </member>
+        <member name="T:DwC_A.IFileReader">
+            <summary>
+            Reads a file
+            </summary>
+        </member>
+        <member name="P:DwC_A.IFileReader.FileName">
+            <summary>
+            Fully qualified path to file
+            </summary>
+        </member>
+        <member name="P:DwC_A.IFileReader.FileMetaData">
+            <summary>
+            Collection of metadata for file
+            </summary>
+        </member>
+        <member name="P:DwC_A.IFileReader.DataRows">
+            <summary>
+            Enumerable collection of data row objects
+            </summary>
+        </member>
+        <member name="P:DwC_A.IFileReader.HeaderRows">
+            <summary>
+            Enumerable collection of header row objects
+            </summary>
+        </member>
+        <member name="P:DwC_A.IFileReader.Rows">
+            <summary>
+            Enumerable collection of all row objects including headers and data
+            </summary>
+        </member>
+        <member name="T:DwC_A.IFileReaderAggregate">
+            <summary>
+            This interface is an aggregate of any FileReader interfaces
+            that should be returned by the CreateFileReader method of
+            the AbstractFactory and allows the ArchiveReader to maintain
+            a consistent collection of FileReader objects without duplication
+            for multiple interfaces.
+            </summary>
+        </member>
+        <member name="T:DwC_A.IRow">
+            <summary>
+            Collection of fields
+            </summary>
+        </member>
+        <member name="P:DwC_A.IRow.FieldMetaData">
+            <summary>
+            List of meta data properties for the fields in this row
+            </summary>
+        </member>
+        <member name="P:DwC_A.IRow.Fields">
+            <summary>
+            An enumerable collection of field values
+            </summary>
+        </member>
+        <member name="P:DwC_A.IRow.Item(System.String)">
+            <summary>
+            Returns field value for a specified term
+            </summary>
+            <param name="term">Darwin Core Term</param>
+            <returns>Field value</returns>
+        </member>
+        <member name="P:DwC_A.IRow.Item(System.Int32)">
+            <summary>
+            Returns field value for a specified field index
+            </summary>
+            <param name="index">Index into collection of fields</param>
+            <returns>Field value</returns>
+        </member>
+        <member name="M:DwC_A.IRow.TryGetField(System.String,System.String@)">
+            <summary>
+            Attempts to return a value for a term or the default value if it has been defined in metadata
+            </summary>
+            <param name="term">Term</param>
+            <param name="value">String value of field</param>
+            <returns>True if found or default value returned.  False if not found.</returns>
+        </member>
+        <member name="T:DwC_A.ITokenizer">
+            <summary>
+            Interface for tokenizer used to split fielded text rows
+            </summary>
+        </member>
+        <member name="M:DwC_A.ITokenizer.Split(System.String)">
+            <summary>
+            Method to split a line of text into fields
+            </summary>
+            <param name="line">One line of text read from file</param>
+            <returns>An enumerable list of field data</returns>
+        </member>
+        <member name="T:DwC_A.Meta.FileType">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FileType.Files">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:DwC_A.Meta.FileType.#ctor">
+            <summary>
+            <para xml:lang="de">Initialisiert eine neue Instanz der <see cref="T:DwC_A.Meta.FileType" /> Klasse.</para>
+            <para xml:lang="en">Initializes a new instance of the <see cref="T:DwC_A.Meta.FileType" /> class.</para>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FileType.LinesTerminatedBy">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FileType.FieldsTerminatedBy">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FileType.FieldsEnclosedBy">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FileType.IgnoreHeaderLines">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FileType.RowType">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FileType.Encoding">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FileType.DateFormat">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:DwC_A.Meta.FileTypeFiles">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FileTypeFiles.Location">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:DwC_A.Meta.FileTypeFiles.#ctor">
+            <summary>
+            <para xml:lang="de">Initialisiert eine neue Instanz der <see cref="T:DwC_A.Meta.FileTypeFiles" /> Klasse.</para>
+            <para xml:lang="en">Initializes a new instance of the <see cref="T:DwC_A.Meta.FileTypeFiles" /> class.</para>
+            </summary>
+        </member>
+        <member name="T:DwC_A.Meta.IFileAttributes">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileAttributes.LinesTerminatedBy">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileAttributes.FieldsTerminatedBy">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileAttributes.FieldsEnclosedBy">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileAttributes.IgnoreHeaderLines">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileAttributes.RowType">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileAttributes.Encoding">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileAttributes.DateFormat">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:DwC_A.Meta.CoreFileType">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.CoreFileType.Id">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.CoreFileType.Field">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:DwC_A.Meta.CoreFileType.#ctor">
+            <summary>
+            <para xml:lang="de">Initialisiert eine neue Instanz der <see cref="T:DwC_A.Meta.CoreFileType" /> Klasse.</para>
+            <para xml:lang="en">Initializes a new instance of the <see cref="T:DwC_A.Meta.CoreFileType" /> class.</para>
+            </summary>
+        </member>
+        <member name="T:DwC_A.Meta.IdFieldType">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IdFieldType.Index">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IdFieldType.IndexSpecified">
+            <summary>
+            <para xml:lang="de">Ruft einen Wert ab, der angibt, ob die Index-Eigenschaft spezifiziert ist, oder legt diesen fest.</para>
+            <para xml:lang="en">Gets or sets a value indicating whether the Index property is specified.</para>
+            </summary>
+        </member>
+        <member name="T:DwC_A.Meta.FieldType">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FieldType.Index">
+            <summary>
+            <para>The index number of the column this field is represented in the source file(s). Indices start with 0.</para>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FieldType.IndexSpecified">
+            <summary>
+            <para xml:lang="de">Ruft einen Wert ab, der angibt, ob die Index-Eigenschaft spezifiziert ist, oder legt diesen fest.</para>
+            <para xml:lang="en">Gets or sets a value indicating whether the Index property is specified.</para>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FieldType.Term">
+            <summary>
+            <para>The unique, qualified identifier for the term, usually a URI. E.g. http://rs.tdwg.org/dwc/terms/scientificName</para>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FieldType.Default">
+            <summary>
+            <para>A global default value that should be used in case the field doesnt have a column index or the actual value for the source record is NULL.</para>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FieldType.Vocabulary">
+            <summary>
+            <para>A URI that identifies a vocabulary used for the values found for the field in the source files. The URI ideally should resolve to some machine readable definition like SKOS, RDF, the GBIF vocabulary schema or a simple text file as often found for ISO or RFC standards. E.g. http://rs.gbif.org/vocabulary/gbif/nomenclatural_code.xml;   http://www.ietf.org/rfc/rfc3066.txt;   http://www.iso.org/iso/list-en1-semic-3.txt</para>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.FieldType.DelimitedBy">
+            <summary>
+            <para>Indicates an optional delimiter used for concatenating multiple values in a list.</para>
+            </summary>
+        </member>
+        <member name="T:DwC_A.Meta.ExtensionFileType">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.ExtensionFileType.Coreid">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.ExtensionFileType.Field">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:DwC_A.Meta.ExtensionFileType.#ctor">
+            <summary>
+            <para xml:lang="de">Initialisiert eine neue Instanz der <see cref="T:DwC_A.Meta.ExtensionFileType" /> Klasse.</para>
+            <para xml:lang="en">Initializes a new instance of the <see cref="T:DwC_A.Meta.ExtensionFileType" /> class.</para>
+            </summary>
+        </member>
+        <member name="T:DwC_A.Meta.Archive">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.Archive.Core">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.Archive.Extension">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.Archive.ExtensionSpecified">
+            <summary>
+            <para xml:lang="de">Ruft einen Wert ab, der angibt, ob die Extension-Collection leer ist.</para>
+            <para xml:lang="en">Gets a value indicating whether the Extension collection is empty.</para>
+            </summary>
+        </member>
+        <member name="M:DwC_A.Meta.Archive.#ctor">
+            <summary>
+            <para xml:lang="de">Initialisiert eine neue Instanz der <see cref="T:DwC_A.Meta.Archive" /> Klasse.</para>
+            <para xml:lang="en">Initializes a new instance of the <see cref="T:DwC_A.Meta.Archive" /> class.</para>
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.Archive.Metadata">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:DwC_A.Meta.FieldMetaDataBuilder">
+            <summary>
+            Builds field metadata definitions
+            </summary>
+        </member>
+        <member name="M:DwC_A.Meta.FieldMetaDataBuilder.Field(System.String)">
+            <summary>
+            Entry point for building field metatdata
+            </summary>
+            <param name="term">Term or column name.  Use Terms class to add well known terms</param>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Meta.FieldMetaDataBuilder.Index(System.Int32)">
+            <summary>
+            Numeric column number of field
+            </summary>
+            <param name="index">Zero based column number</param>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Meta.FieldMetaDataBuilder.Term(System.String)">
+            <summary>
+            Sets the term for the field definition
+            </summary>
+            <param name="term">Use Terms class to lookup well known terms</param>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Meta.FieldMetaDataBuilder.Build">
+            <summary>
+            Builds field metadata
+            </summary>
+            <returns>Field metadata</returns>
+        </member>
+        <member name="T:DwC_A.Meta.FieldsMetaDataBuilder">
+            <summary>
+            Creates a collection of field metadata
+            </summary>
+        </member>
+        <member name="M:DwC_A.Meta.FieldsMetaDataBuilder.Fields">
+            <summary>
+            Entry point for building a collection of field metadata
+            </summary>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Meta.FieldsMetaDataBuilder.AutomaticallyIndex">
+            <summary>
+            Use this method to automatically index fields in the order they are defined
+            </summary>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Meta.FieldsMetaDataBuilder.AddField(System.Func{DwC_A.Meta.FieldMetaDataBuilder,DwC_A.Meta.FieldMetaDataBuilder})">
+            <summary>
+            Add field metadata definition.  Call this for each field to define.
+            </summary>
+            <param name="fieldMetaData">This method will create a FieldMetaDataBuilder and pass it to a lamba defined to fill in the field metadat</param>
+            <returns>this</returns>
+        </member>
+        <member name="M:DwC_A.Meta.FieldsMetaDataBuilder.Build">
+            <summary>
+            Builds the field metadata collection
+            </summary>
+            <returns>Field metadata collection</returns>
+        </member>
+        <member name="T:DwC_A.Meta.IFieldMetaData">
+            <summary>
+            Collection of meta data for fields
+            </summary>
+        </member>
+        <member name="M:DwC_A.Meta.IFieldMetaData.IndexOf(System.String)">
+            <summary>
+            Retrieves index for a term
+            </summary>
+            <param name="term">Darwin Core Term</param>
+            <returns>Index of column containing the term.  If the term is not found then returns -1.</returns>
+        </member>
+        <member name="P:DwC_A.Meta.IFieldMetaData.Item(System.Int32)">
+            <summary>
+            Retrieves field at index
+            </summary>
+            <param name="index">Index or column number</param>
+            <returns>String representation of field</returns>
+        </member>
+        <member name="P:DwC_A.Meta.IFieldMetaData.Item(System.String)">
+            <summary>
+            Retrieves field data for a term
+            </summary>
+            <param name="term">Darwin Core Term</param>
+            <returns>String representation of field</returns>
+        </member>
+        <member name="M:DwC_A.Meta.IFieldMetaData.TryGetFieldType(System.String,DwC_A.Meta.FieldType@)">
+            <summary>
+            Attempts to retrieve the field by term name
+            </summary>
+            <param name="term">Darwin Core Term</param>
+            <param name="value">FieldType</param>
+            <returns>Returns false if not found</returns>
+        </member>
+        <member name="P:DwC_A.Meta.IFieldMetaData.Length">
+            <summary>
+            Returns the number of indexed fields
+            </summary>
+        </member>
+        <member name="T:DwC_A.Meta.IFileMetaData">
+            <summary>
+            Reads various file meta data
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileMetaData.DateFormat">
+            <summary>
+            Date format for dates
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileMetaData.Encoding">
+            <summary>
+            File encdoing.  Default UTF-8
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileMetaData.Fields">
+            <summary>
+            Collection of metadata for fields
+            </summary>
+            <see cref="T:DwC_A.Meta.IFileMetaData"/>
+        </member>
+        <member name="P:DwC_A.Meta.IFileMetaData.FieldsEnclosedBy">
+            <summary>
+            Field quote character
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileMetaData.FieldsTerminatedBy">
+            <summary>
+            Field delimiter
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileMetaData.FileName">
+            <summary>
+            Filename only without path info
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileMetaData.HeaderRowCount">
+            <summary>
+            Number of header rows
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileMetaData.Id">
+            <summary>
+            Index field information
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileMetaData.LinesTerminatedBy">
+            <summary>
+            Line end style
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileMetaData.LineTerminatorLength">
+            <summary>
+            Number of characters for line end.  
+            </summary>
+        </member>
+        <member name="P:DwC_A.Meta.IFileMetaData.RowType">
+            <summary>
+            File row type
+            </summary>
+        </member>
+        <member name="M:DwC_A.Meta.MetaDataReader.ReadMetaData(System.String)">
+            <summary>
+            Deserializes the meta.xml file into an Archive object
+            </summary>
+            <param name="path">Path to the meta.xml file (excluding filename)</param>
+            <returns>Archive object</returns>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.acceptedNameUsage">
+            <summary>
+            The full name, with authorship and date information if known, of the currently valid (zoological) or accepted (botanical) taxon.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/acceptedNameUsage
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.acceptedNameUsageID">
+            <summary>
+            An identifier for the name usage (documented meaning of the name according to a source) of the currently valid (zoological) or accepted (botanical) taxon.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/acceptedNameUsageID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.accessRights">
+            <summary>
+            Information about who can access the resource or an indication of its security status.
+            </summary>
+            <value>
+            http://purl.org/dc/terms/accessRights
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.associatedMedia">
+            <summary>
+            A list (concatenated and separated) of identifiers (publication, global unique identifier, URI) of media associated with the Occurrence.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/associatedMedia
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.associatedOccurrences">
+            <summary>
+            A list (concatenated and separated) of identifiers of other Occurrence records and their associations to this Occurrence.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/associatedOccurrences
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.associatedOrganisms">
+            <summary>
+            A list (concatenated and separated) of identifiers of other Organisms and their associations to this Organism.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/associatedOrganisms
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.associatedReferences">
+            <summary>
+            A list (concatenated and separated) of identifiers (publication, bibliographic reference, global unique identifier, URI) of literature associated with the Occurrence.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/associatedReferences
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.associatedSequences">
+            <summary>
+            A list (concatenated and separated) of identifiers (publication, global unique identifier, URI) of genetic sequence information associated with the Occurrence.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/associatedSequences
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.associatedTaxa">
+            <summary>
+            A list (concatenated and separated) of identifiers or names of taxa and their associations with the Occurrence.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/associatedTaxa
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.basisOfRecord">
+            <summary>
+            The specific nature of the data record.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/basisOfRecord
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.bed">
+            <summary>
+            The full name of the lithostratigraphic bed from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/bed
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.behavior">
+            <summary>
+            The behavior shown by the subject at the time the Occurrence was recorded.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/behavior
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.bibliographicCitation">
+            <summary>
+            A bibliographic reference for the resource as a statement indicating how this record should be cited (attributed) when used.
+            </summary>
+            <value>
+            http://purl.org/dc/terms/bibliographicCitation
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.catalogNumber">
+            <summary>
+            An identifier (preferably unique) for the record within the data set or collection.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/catalogNumber
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.class">
+            <summary>
+            The full scientific name of the class in which the taxon is classified.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/class
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.collectionCode">
+            <summary>
+            The name, acronym, coden, or initialism identifying the collection or data set from which the record was derived.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/collectionCode
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.collectionID">
+            <summary>
+            An identifier for the collection or dataset from which the record was derived.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/collectionID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.continent">
+            <summary>
+            The name of the continent in which the Location occurs.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/continent
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.coordinatePrecision">
+            <summary>
+            A decimal representation of the precision of the coordinates given in the decimalLatitude and decimalLongitude.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/coordinatePrecision
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.coordinateUncertaintyInMeters">
+            <summary>
+            The horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location. Leave the value empty if the uncertainty is unknown, cannot be estimated, or is not applicable (because there are no coordinates). Zero is not a valid value for this term.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/coordinateUncertaintyInMeters
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.country">
+            <summary>
+            The name of the country or major administrative unit in which the Location occurs.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/country
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.countryCode">
+            <summary>
+            The standard code for the country in which the Location occurs.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/countryCode
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.county">
+            <summary>
+            The full, unabbreviated name of the next smaller administrative region than stateProvince (county, shire, department, etc.) in which the Location occurs.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/county
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.dataGeneralizations">
+            <summary>
+            Actions taken to make the shared data less specific or complete than in its original form. Suggests that alternative data of higher quality may be available on request.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/dataGeneralizations
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.datasetID">
+            <summary>
+            An identifier for the set of data. May be a global unique identifier or an identifier specific to a collection or institution.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/datasetID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.datasetName">
+            <summary>
+            The name identifying the data set from which the record was derived.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/datasetName
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.dateIdentified">
+            <summary>
+            The date on which the subject was determined as representing the Taxon.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/dateIdentified
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.day">
+            <summary>
+            The integer day of the month on which the Event occurred.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/day
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.decimalLatitude">
+            <summary>
+            The geographic latitude (in decimal degrees, using the spatial reference system given in geodeticDatum) of the geographic center of a Location. Positive values are north of the Equator, negative values are south of it. Legal values lie between -90 and 90, inclusive.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/decimalLatitude
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.decimalLongitude">
+            <summary>
+            The geographic longitude (in decimal degrees, using the spatial reference system given in geodeticDatum) of the geographic center of a Location. Positive values are east of the Greenwich Meridian, negative values are west of it. Legal values lie between -180 and 180, inclusive.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/decimalLongitude
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.disposition">
+            <summary>
+            The current state of a specimen with respect to the collection identified in collectionCode or collectionID.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/disposition
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.dynamicProperties">
+            <summary>
+            A list of additional measurements, facts, characteristics, or assertions about the record. Meant to provide a mechanism for structured content.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/dynamicProperties
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.earliestAgeOrLowestStage">
+            <summary>
+            The full name of the earliest possible geochronologic age or lowest chronostratigraphic stage attributable to the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/earliestAgeOrLowestStage
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.earliestEonOrLowestEonothem">
+            <summary>
+            The full name of the earliest possible geochronologic eon or lowest chrono-stratigraphic eonothem or the informal name ("Precambrian") attributable to the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/earliestEonOrLowestEonothem
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.earliestEpochOrLowestSeries">
+            <summary>
+            The full name of the earliest possible geochronologic epoch or lowest chronostratigraphic series attributable to the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/earliestEpochOrLowestSeries
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.earliestEraOrLowestErathem">
+            <summary>
+            The full name of the earliest possible geochronologic era or lowest chronostratigraphic erathem attributable to the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/earliestEraOrLowestErathem
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.earliestPeriodOrLowestSystem">
+            <summary>
+            The full name of the earliest possible geochronologic period or lowest chronostratigraphic system attributable to the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/earliestPeriodOrLowestSystem
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.endDayOfYear">
+            <summary>
+            The latest integer day of the year on which the Event occurred (1 for January 1, 365 for December 31, except in a leap year, in which case it is 366).
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/endDayOfYear
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.establishmentMeans">
+            <summary>
+            The process by which the biological individual(s) represented in the Occurrence became established at the location.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/establishmentMeans
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.Event">
+            <summary>
+            An action that occurs at some location during some time.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/Event
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.eventDate">
+            <summary>
+            The date-time or interval during which an Event occurred. For occurrences, this is the date-time when the event was recorded. Not suitable for a time in a geological context.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/eventDate
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.eventID">
+            <summary>
+            An identifier for the set of information associated with an Event (something that occurs at a place and time). May be a global unique identifier or an identifier specific to the data set.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/eventID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.eventRemarks">
+            <summary>
+            Comments or notes about the Event.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/eventRemarks
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.eventTime">
+            <summary>
+            The time or interval during which an Event occurred.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/eventTime
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.family">
+            <summary>
+            The full scientific name of the family in which the taxon is classified.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/family
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.fieldNotes">
+            <summary>
+            One of a) an indicator of the existence of, b) a reference to (publication, URI), or c) the text of notes taken in the field about the Event.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/fieldNotes
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.fieldNumber">
+            <summary>
+            An identifier given to the event in the field. Often serves as a link between field notes and the Event.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/fieldNumber
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.footprintSpatialFit">
+            <summary>
+            The ratio of the area of the footprint (footprintWKT) to the area of the true (original, or most specific) spatial representation of the Location. Legal values are 0, greater than or equal to 1, or undefined. A value of 1 is an exact match or 100% overlap. A value of 0 should be used if the given footprint does not completely contain the original representation. The footprintSpatialFit is undefined (and should be left empty) if the original representation is a point without uncertainty and the given georeference is not that same point (without uncertainty). If both the original and the given georeference are the same point, the footprintSpatialFit is 1.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/footprintSpatialFit
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.footprintSRS">
+            <summary>
+            A Well-Known Text (WKT) representation of the Spatial Reference System (SRS) for the footprintWKT of the Location. Do not use this term to describe the SRS of the decimalLatitude and decimalLongitude, even if it is the same as for the footprintWKT - use the geodeticDatum instead.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/footprintSRS
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.footprintWKT">
+            <summary>
+            A Well-Known Text (WKT) representation of the shape (footprint, geometry) that defines the Location. A Location may have both a point-radius representation (see decimalLatitude) and a footprint representation, and they may differ from each other.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/footprintWKT
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.formation">
+            <summary>
+            The full name of the lithostratigraphic formation from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/formation
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.FossilSpecimen">
+            <summary>
+            A preserved specimen that is a fossil.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/FossilSpecimen
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.genus">
+            <summary>
+            The full scientific name of the genus in which the taxon is classified.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/genus
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.geodeticDatum">
+            <summary>
+            The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/geodeticDatum
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.GeologicalContext">
+            <summary>
+            Geological information, such as stratigraphy, that qualifies a region or place.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/GeologicalContext
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.geologicalContextID">
+            <summary>
+            An identifier for the set of information associated with a GeologicalContext (the location within a geological context, such as stratigraphy). May be a global unique identifier or an identifier specific to the data set.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/geologicalContextID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.georeferencedBy">
+            <summary>
+            A list (concatenated and separated) of names of people, groups, or organizations who determined the georeference (spatial representation) for the Location.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/georeferencedBy
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.georeferencedDate">
+            <summary>
+            The date on which the Location was georeferenced.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/georeferencedDate
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.georeferenceProtocol">
+            <summary>
+            A description or reference to the methods used to determine the spatial footprint, coordinates, and uncertainties.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/georeferenceProtocol
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.georeferenceRemarks">
+            <summary>
+            Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/georeferenceRemarks
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.georeferenceSources">
+            <summary>
+            A list (concatenated and separated) of maps, gazetteers, or other resources used to georeference the Location, described specifically enough to allow anyone in the future to use the same resources.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/georeferenceSources
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.georeferenceVerificationStatus">
+            <summary>
+            A categorical description of the extent to which the georeference has been verified to represent the best possible spatial description.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/georeferenceVerificationStatus
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.group">
+            <summary>
+            The full name of the lithostratigraphic group from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/group
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.habitat">
+            <summary>
+            A category or description of the habitat in which the Event occurred.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/habitat
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.higherClassification">
+            <summary>
+            A list (concatenated and separated) of taxa names terminating at the rank immediately superior to the taxon referenced in the taxon record.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/higherClassification
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.higherGeography">
+            <summary>
+            A list (concatenated and separated) of geographic names less specific than the information captured in the locality term.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/higherGeography
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.higherGeographyID">
+            <summary>
+            An identifier for the geographic region within which the Location occurred.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/higherGeographyID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.highestBiostratigraphicZone">
+            <summary>
+            The full name of the highest possible geological biostratigraphic zone of the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/highestBiostratigraphicZone
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.HumanObservation">
+            <summary>
+            An output of a human observation process.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/HumanObservation
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.Identification">
+            <summary>
+            A taxonomic determination (e.g., the assignment to a taxon).
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/Identification
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.identificationID">
+            <summary>
+            An identifier for the Identification (the body of information associated with the assignment of a scientific name). May be a global unique identifier or an identifier specific to the data set.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/identificationID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.identificationQualifier">
+            <summary>
+            A brief phrase or a standard term ("cf.", "aff.") to express the determiner's doubts about the Identification.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/identificationQualifier
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.identificationReferences">
+            <summary>
+            A list (concatenated and separated) of references (publication, global unique identifier, URI) used in the Identification.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/identificationReferences
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.identificationRemarks">
+            <summary>
+            Comments or notes about the Identification.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/identificationRemarks
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.identificationVerificationStatus">
+            <summary>
+            A categorical indicator of the extent to which the taxonomic identification has been verified to be correct.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/identificationVerificationStatus
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.identifiedBy">
+            <summary>
+            A list (concatenated and separated) of names of people, groups, or organizations who assigned the Taxon to the subject.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/identifiedBy
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.individualCount">
+            <summary>
+            The number of individuals represented present at the time of the Occurrence.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/individualCount
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.informationWithheld">
+            <summary>
+            Additional information that exists, but that has not been shared in the given record.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/informationWithheld
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.infraspecificEpithet">
+            <summary>
+            The name of the lowest or terminal infraspecific epithet of the scientificName, excluding any rank designation.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/infraspecificEpithet
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.institutionCode">
+            <summary>
+            The name (or acronym) in use by the institution having custody of the object(s) or information referred to in the record.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/institutionCode
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.institutionID">
+            <summary>
+            An identifier for the institution having custody of the object(s) or information referred to in the record.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/institutionID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.island">
+            <summary>
+            The name of the island on or near which the Location occurs.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/island
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.islandGroup">
+            <summary>
+            The name of the island group in which the Location occurs.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/islandGroup
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.kingdom">
+            <summary>
+            The full scientific name of the kingdom in which the taxon is classified.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/kingdom
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.language">
+            <summary>
+            A language of the resource.
+            </summary>
+            <value>
+            http://purl.org/dc/terms/language
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.latestAgeOrHighestStage">
+            <summary>
+            The full name of the latest possible geochronologic age or highest chronostratigraphic stage attributable to the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/latestAgeOrHighestStage
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.latestEonOrHighestEonothem">
+            <summary>
+            The full name of the latest possible geochronologic eon or highest chrono-stratigraphic eonothem or the informal name ("Precambrian") attributable to the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/latestEonOrHighestEonothem
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.latestEpochOrHighestSeries">
+            <summary>
+            The full name of the latest possible geochronologic epoch or highest chronostratigraphic series attributable to the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/latestEpochOrHighestSeries
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.latestEraOrHighestErathem">
+            <summary>
+            The full name of the latest possible geochronologic era or highest chronostratigraphic erathem attributable to the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/latestEraOrHighestErathem
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.latestPeriodOrHighestSystem">
+            <summary>
+            The full name of the latest possible geochronologic period or highest chronostratigraphic system attributable to the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/latestPeriodOrHighestSystem
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.license">
+            <summary>
+            A legal document giving official permission to do something with the resource.
+            </summary>
+            <value>
+            http://purl.org/dc/terms/license
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.lifeStage">
+            <summary>
+            The age class or life stage of the biological individual(s) at the time the Occurrence was recorded.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/lifeStage
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.lithostratigraphicTerms">
+            <summary>
+            The combination of all litho-stratigraphic names for the rock from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/lithostratigraphicTerms
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.LivingSpecimen">
+            <summary>
+            A specimen that is alive.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/LivingSpecimen
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.locality">
+            <summary>
+            The specific description of the place. Less specific geographic information can be provided in other geographic terms (higherGeography, continent, country, stateProvince, county, municipality, waterBody, island, islandGroup). This term may contain information modified from the original to correct perceived errors or standardize the description.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/locality
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.Location">
+            <summary>
+            A spatial region or named place.
+            </summary>
+            <value>
+            http://purl.org/dc/terms/Location
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.locationAccordingTo">
+            <summary>
+            Information about the source of this Location information. Could be a publication (gazetteer), institution, or team of individuals.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/locationAccordingTo
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.locationID">
+            <summary>
+            An identifier for the set of location information (data associated with dcterms:Location). May be a global unique identifier or an identifier specific to the data set.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/locationID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.locationRemarks">
+            <summary>
+            Comments or notes about the Location.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/locationRemarks
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.lowestBiostratigraphicZone">
+            <summary>
+            The full name of the lowest possible geological biostratigraphic zone of the stratigraphic horizon from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/lowestBiostratigraphicZone
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.MachineObservation">
+            <summary>
+            An output of a machine observation process.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/MachineObservation
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.MaterialSample">
+            <summary>
+            A physical result of a sampling (or subsampling) event. In biological collections, the material sample is typically collected, and either preserved or destructively processed.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/MaterialSample
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.materialSampleID">
+            <summary>
+            An identifier for the MaterialSample (as opposed to a particular digital record of the material sample). In the absence of a persistent global unique identifier, construct one from a combination of identifiers in the record that will most closely make the materialSampleID globally unique.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/materialSampleID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.maximumDepthInMeters">
+            <summary>
+            The greater depth of a range of depth below the local surface, in meters.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/maximumDepthInMeters
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.maximumDistanceAboveSurfaceInMeters">
+            <summary>
+            The greater distance in a range of distance from a reference surface in the vertical direction, in meters. Use positive values for locations above the surface, negative values for locations below. If depth measures are given, the reference surface is the location given by the depth, otherwise the reference surface is the location given by the elevation.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/maximumDistanceAboveSurfaceInMeters
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.maximumElevationInMeters">
+            <summary>
+            The upper limit of the range of elevation (altitude, usually above sea level), in meters.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/maximumElevationInMeters
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.measurementAccuracy">
+            <summary>
+            The description of the potential error associated with the measurementValue.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/measurementAccuracy
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.measurementDeterminedBy">
+            <summary>
+            A list (concatenated and separated) of names of people, groups, or organizations who determined the value of the MeasurementOrFact.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/measurementDeterminedBy
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.measurementDeterminedDate">
+            <summary>
+            The date on which the MeasurementOrFact was made.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/measurementDeterminedDate
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.measurementID">
+            <summary>
+            An identifier for the MeasurementOrFact (information pertaining to measurements, facts, characteristics, or assertions). May be a global unique identifier or an identifier specific to the data set.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/measurementID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.measurementMethod">
+            <summary>
+            A description of or reference to (publication, URI) the method or protocol used to determine the measurement, fact, characteristic, or assertion.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/measurementMethod
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.MeasurementOrFact">
+            <summary>
+            A measurement of or fact about an rdfs:Resource (http://www.w3.org/2000/01/rdf-schema#Resource).
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/MeasurementOrFact
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.measurementRemarks">
+            <summary>
+            Comments or notes accompanying the MeasurementOrFact.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/measurementRemarks
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.measurementType">
+            <summary>
+            The nature of the measurement, fact, characteristic, or assertion.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/measurementType
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.measurementUnit">
+            <summary>
+            The units associated with the measurementValue.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/measurementUnit
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.measurementValue">
+            <summary>
+            The value of the measurement, fact, characteristic, or assertion.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/measurementValue
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.member">
+            <summary>
+            The full name of the lithostratigraphic member from which the cataloged item was collected.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/member
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.minimumDepthInMeters">
+            <summary>
+            The lesser depth of a range of depth below the local surface, in meters.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/minimumDepthInMeters
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.minimumDistanceAboveSurfaceInMeters">
+            <summary>
+            The lesser distance in a range of distance from a reference surface in the vertical direction, in meters. Use positive values for locations above the surface, negative values for locations below. If depth measures are given, the reference surface is the location given by the depth, otherwise the reference surface is the location given by the elevation.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/minimumDistanceAboveSurfaceInMeters
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.minimumElevationInMeters">
+            <summary>
+            The lower limit of the range of elevation (altitude, usually above sea level), in meters.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/minimumElevationInMeters
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.modified">
+            <summary>
+            The most recent date-time on which the resource was changed.
+            </summary>
+            <value>
+            http://purl.org/dc/terms/modified
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.month">
+            <summary>
+            The integer month in which the Event occurred.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/month
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.municipality">
+            <summary>
+            The full, unabbreviated name of the next smaller administrative region than county (city, municipality, etc.) in which the Location occurs. Do not use this term for a nearby named place that does not contain the actual location.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/municipality
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.nameAccordingTo">
+            <summary>
+            The reference to the source in which the specific taxon concept circumscription is defined or implied - traditionally signified by the Latin "sensu" or "sec." (from secundum, meaning "according to"). For taxa that result from identifications, a reference to the keys, monographs, experts and other sources should be given.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/nameAccordingTo
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.nameAccordingToID">
+            <summary>
+            An identifier for the source in which the specific taxon concept circumscription is defined or implied. See nameAccordingTo.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/nameAccordingToID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.namePublishedIn">
+            <summary>
+            A reference for the publication in which the scientificName was originally established under the rules of the associated nomenclaturalCode.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/namePublishedIn
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.namePublishedInID">
+            <summary>
+            An identifier for the publication in which the scientificName was originally established under the rules of the associated nomenclaturalCode.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/namePublishedInID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.namePublishedInYear">
+            <summary>
+            The four-digit year in which the scientificName was published.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/namePublishedInYear
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.nomenclaturalCode">
+            <summary>
+            The nomenclatural code (or codes in the case of an ambiregnal name) under which the scientificName is constructed.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/nomenclaturalCode
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.nomenclaturalStatus">
+            <summary>
+            The status related to the original publication of the name and its conformance to the relevant rules of nomenclature. It is based essentially on an algorithm according to the business rules of the code. It requires no taxonomic opinion.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/nomenclaturalStatus
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.Occurrence">
+            <summary>
+            An existence of an Organism (sensu http://rs.tdwg.org/dwc/terms/Organism) at a particular place at a particular time.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/Occurrence
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.occurrenceID">
+            <summary>
+            An identifier for the Occurrence (as opposed to a particular digital record of the occurrence). In the absence of a persistent global unique identifier, construct one from a combination of identifiers in the record that will most closely make the occurrenceID globally unique.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/occurrenceID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.occurrenceRemarks">
+            <summary>
+            Comments or notes about the Occurrence.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/occurrenceRemarks
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.occurrenceStatus">
+            <summary>
+            A statement about the presence or absence of a Taxon at a Location.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/occurrenceStatus
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.order">
+            <summary>
+            The full scientific name of the order in which the taxon is classified.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/order
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.Organism">
+            <summary>
+            A particular organism or defined group of organisms considered to be taxonomically homogeneous.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/Organism
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.organismID">
+            <summary>
+            An identifier for the Organism instance (as opposed to a particular digital record of the Organism). May be a globally unique identifier or an identifier specific to the data set.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/organismID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.organismName">
+            <summary>
+            A textual name or label assigned to an Organism instance.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/organismName
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.organismQuantity">
+            <summary>
+            A number or enumeration value for the quantity of organisms.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/organismQuantity
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.organismQuantityType">
+            <summary>
+            The type of quantification system used for the quantity of organisms.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/organismQuantityType
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.organismRemarks">
+            <summary>
+            Comments or notes about the Organism instance.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/organismRemarks
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.organismScope">
+            <summary>
+            A description of the kind of Organism instance. Can be used to indicate whether the Organism instance represents a discrete organism or if it represents a particular type of aggregation.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/organismScope
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.originalNameUsage">
+            <summary>
+            The taxon name, with authorship and date information if known, as it originally appeared when first established under the rules of the associated nomenclaturalCode. The basionym (botany) or basonym (bacteriology) of the scientificName or the senior/earlier homonym for replaced names.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/originalNameUsage
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.originalNameUsageID">
+            <summary>
+            An identifier for the name usage (documented meaning of the name according to a source) in which the terminal element of the scientificName was originally established under the rules of the associated nomenclaturalCode.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/originalNameUsageID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.otherCatalogNumbers">
+            <summary>
+            A list (concatenated and separated) of previous or alternate fully qualified catalog numbers or other human-used identifiers for the same Occurrence, whether in the current or any other data set or collection.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/otherCatalogNumbers
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.ownerInstitutionCode">
+            <summary>
+            The name (or acronym) in use by the institution having ownership of the object(s) or information referred to in the record.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/ownerInstitutionCode
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.parentEventID">
+            <summary>
+            An identifier for the broader Event that groups this and potentially other Events.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/parentEventID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.parentNameUsage">
+            <summary>
+            The full name, with authorship and date information if known, of the direct, most proximate higher-rank parent taxon (in a classification) of the most specific element of the scientificName.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/parentNameUsage
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.parentNameUsageID">
+            <summary>
+            An identifier for the name usage (documented meaning of the name according to a source) of the direct, most proximate higher-rank parent taxon (in a classification) of the most specific element of the scientificName.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/parentNameUsageID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.phylum">
+            <summary>
+            The full scientific name of the phylum or division in which the taxon is classified.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/phylum
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.pointRadiusSpatialFit">
+            <summary>
+            The ratio of the area of the point-radius (decimalLatitude, decimalLongitude, coordinateUncertaintyInMeters) to the area of the true (original, or most specific) spatial representation of the Location. Legal values are 0, greater than or equal to 1, or undefined. A value of 1 is an exact match or 100% overlap. A value of 0 should be used if the given point-radius does not completely contain the original representation. The pointRadiusSpatialFit is undefined (and should be left empty) if the original representation is a point without uncertainty and the given georeference is not that same point (without uncertainty). If both the original and the given georeference are the same point, the pointRadiusSpatialFit is 1.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/pointRadiusSpatialFit
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.preparations">
+            <summary>
+            A list (concatenated and separated) of preparations and preservation methods for a specimen.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/preparations
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.PreservedSpecimen">
+            <summary>
+            A specimen that has been preserved.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/PreservedSpecimen
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.previousIdentifications">
+            <summary>
+            A list (concatenated and separated) of previous assignments of names to the Organism.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/previousIdentifications
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.recordedBy">
+            <summary>
+            A list (concatenated and separated) of names of people, groups, or organizations responsible for recording the original Occurrence. The primary collector or observer, especially one who applies a personal identifier (recordNumber), should be listed first.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/recordedBy
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.recordNumber">
+            <summary>
+            An identifier given to the Occurrence at the time it was recorded. Often serves as a link between field notes and an Occurrence record, such as a specimen collector's number.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/recordNumber
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.references">
+            <summary>
+            A related resource that is referenced, cited, or otherwise pointed to by the described resource.
+            </summary>
+            <value>
+            http://purl.org/dc/terms/references
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.relatedResourceID">
+            <summary>
+            An identifier for a related resource (the object, rather than the subject of the relationship).
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/relatedResourceID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.relationshipAccordingTo">
+            <summary>
+            The source (person, organization, publication, reference) establishing the relationship between the two resources.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/relationshipAccordingTo
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.relationshipEstablishedDate">
+            <summary>
+            The date-time on which the relationship between the two resources was established.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/relationshipEstablishedDate
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.relationshipOfResource">
+            <summary>
+            The relationship of the resource identified by relatedResourceID to the subject (optionally identified by the resourceID).
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/relationshipOfResource
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.relationshipRemarks">
+            <summary>
+            Comments or notes about the relationship between the two resources.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/relationshipRemarks
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.reproductiveCondition">
+            <summary>
+            The reproductive condition of the biological individual(s) represented in the Occurrence.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/reproductiveCondition
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.resourceID">
+            <summary>
+            An identifier for the resource that is the subject of the relationship.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/resourceID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.ResourceRelationship">
+            <summary>
+            A relationship of one rdfs:Resource (http://www.w3.org/2000/01/rdf-schema#Resource) to another.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/ResourceRelationship
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.resourceRelationshipID">
+            <summary>
+            An identifier for an instance of relationship between one resource (the subject) and another (relatedResource, the object).
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/resourceRelationshipID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.rightsHolder">
+            <summary>
+            A person or organization owning or managing rights over the resource.
+            </summary>
+            <value>
+            http://purl.org/dc/terms/rightsHolder
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.sampleSizeUnit">
+            <summary>
+            The unit of measurement of the size (time duration, length, area, or volume) of a sample in a sampling event.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/sampleSizeUnit
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.sampleSizeValue">
+            <summary>
+            A numeric value for a measurement of the size (time duration, length, area, or volume) of a sample in a sampling event.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/sampleSizeValue
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.samplingEffort">
+            <summary>
+            The amount of effort expended during an Event.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/samplingEffort
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.samplingProtocol">
+            <summary>
+            The name of, reference to, or description of the method or protocol used during an Event.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/samplingProtocol
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.scientificName">
+            <summary>
+            The full scientific name, with authorship and date information if known. When forming part of an Identification, this should be the name in lowest level taxonomic rank that can be determined. This term should not contain identification qualifications, which should instead be supplied in the IdentificationQualifier term.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/scientificName
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.scientificNameAuthorship">
+            <summary>
+            The authorship information for the scientificName formatted according to the conventions of the applicable nomenclaturalCode.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/scientificNameAuthorship
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.scientificNameID">
+            <summary>
+            An identifier for the nomenclatural (not taxonomic) details of a scientific name.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/scientificNameID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.sex">
+            <summary>
+            The sex of the biological individual(s) represented in the Occurrence.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/sex
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.specificEpithet">
+            <summary>
+            The name of the first or species epithet of the scientificName.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/specificEpithet
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.startDayOfYear">
+            <summary>
+            The earliest integer day of the year on which the Event occurred (1 for January 1, 365 for December 31, except in a leap year, in which case it is 366).
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/startDayOfYear
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.stateProvince">
+            <summary>
+            The name of the next smaller administrative region than country (state, province, canton, department, region, etc.) in which the Location occurs.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/stateProvince
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.subgenus">
+            <summary>
+            The full scientific name of the subgenus in which the taxon is classified. Values should include the genus to avoid homonym confusion.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/subgenus
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.Taxon">
+            <summary>
+            A group of organisms (sensu http://purl.obolibrary.org/obo/OBI_0100026) considered by taxonomists to form a homogeneous unit.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/Taxon
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.taxonConceptID">
+            <summary>
+            An identifier for the taxonomic concept to which the record refers - not for the nomenclatural details of a taxon.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/taxonConceptID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.taxonID">
+            <summary>
+            An identifier for the set of taxon information (data associated with the Taxon class). May be a global unique identifier or an identifier specific to the data set.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/taxonID
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.taxonomicStatus">
+            <summary>
+            The status of the use of the scientificName as a label for a taxon. Requires taxonomic opinion to define the scope of a taxon. Rules of priority then are used to define the taxonomic status of the nomenclature contained in that scope, combined with the experts opinion. It must be linked to a specific taxonomic reference that defines the concept.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/taxonomicStatus
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.taxonRank">
+            <summary>
+            The taxonomic rank of the most specific name in the scientificName.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/taxonRank
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.taxonRemarks">
+            <summary>
+            Comments or notes about the taxon or name.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/taxonRemarks
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.type">
+            <summary>
+            The nature or genre of the resource.
+            </summary>
+            <value>
+            http://purl.org/dc/elements/1.1/type
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.typeStatus">
+            <summary>
+            A list (concatenated and separated) of nomenclatural types (type status, typified scientific name, publication) applied to the subject.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/typeStatus
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.UseWithIRI">
+            <summary>
+            The category of terms that are recommended to have an IRI as a value.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/attributes/UseWithIRI
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.verbatimCoordinates">
+            <summary>
+            The verbatim original spatial coordinates of the Location. The coordinate ellipsoid, geodeticDatum, or full Spatial Reference System (SRS) for these coordinates should be stored in verbatimSRS and the coordinate system should be stored in verbatimCoordinateSystem.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/verbatimCoordinates
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.verbatimCoordinateSystem">
+            <summary>
+            The coordinate format for the verbatimLatitude and verbatimLongitude or the verbatimCoordinates of the Location.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/verbatimCoordinateSystem
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.verbatimDepth">
+            <summary>
+            The original description of the depth below the local surface.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/verbatimDepth
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.verbatimElevation">
+            <summary>
+            The original description of the elevation (altitude, usually above sea level) of the Location.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/verbatimElevation
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.verbatimEventDate">
+            <summary>
+            The verbatim original representation of the date and time information for an Event.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/verbatimEventDate
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.verbatimLatitude">
+            <summary>
+            The verbatim original latitude of the Location. The coordinate ellipsoid, geodeticDatum, or full Spatial Reference System (SRS) for these coordinates should be stored in verbatimSRS and the coordinate system should be stored in verbatimCoordinateSystem.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/verbatimLatitude
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.verbatimLocality">
+            <summary>
+            The original textual description of the place.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/verbatimLocality
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.verbatimLongitude">
+            <summary>
+            The verbatim original longitude of the Location. The coordinate ellipsoid, geodeticDatum, or full Spatial Reference System (SRS) for these coordinates should be stored in verbatimSRS and the coordinate system should be stored in verbatimCoordinateSystem.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/verbatimLongitude
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.verbatimSRS">
+            <summary>
+            The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which coordinates given in verbatimLatitude and verbatimLongitude, or verbatimCoordinates are based.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/verbatimSRS
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.verbatimTaxonRank">
+            <summary>
+            The taxonomic rank of the most specific name in the scientificName as it appears in the original record.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/verbatimTaxonRank
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.vernacularName">
+            <summary>
+            A common or vernacular name.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/vernacularName
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.waterBody">
+            <summary>
+            The name of the water body in which the Location occurs.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/waterBody
+            </value>
+        </member>
+        <member name="F:DwC_A.Terms.Terms.year">
+            <summary>
+            The four-digit year in which the Event occurred, according to the Common Era Calendar.
+            </summary>
+            <value>
+            http://rs.tdwg.org/dwc/terms/year
+            </value>
+        </member>
+    </members>
+</doc>
