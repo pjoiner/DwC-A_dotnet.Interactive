@@ -14,7 +14,7 @@ namespace UnitTests
         [Fact]
         public void ShouldPrintArchiveMetaDataTable()
         {
-            var expected = "<table><thead><tr><td>File Type</td><td>File Name</td><td>Row Type</td></tr></thead><tbody><tr><td><b>CoreFile:</b></td><td>taxon.txt</td><td>http://rs.tdwg.org/dwc/terms/Taxon</td></tr><tr><td><b>Metadata:</b></td><td>eml.xml</td></tr></tbody></table>";
+            var expected = File.ReadAllText("./Resources/html/archive.html");
             using (var archive = new ArchiveReader(whalesArchive))
             {
                 using(var writer = new StringWriter())

@@ -4,11 +4,9 @@ using Microsoft.DotNet.Interactive.Formatting;
 using System.Threading.Tasks;
 using Core.DwC_A;
 using Core.DwC_A.Meta;
-using Core.DwC_A.Terms;
 using DwC_A.Interactive.Formatters;
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using System;
 using System.Collections.Generic;
 
 namespace DwC_A.Interactive
@@ -22,7 +20,7 @@ namespace DwC_A.Interactive
             Formatter.Register<DefaultTerms>(TermsFormatter.Register, "text/html");
             Formatter.Register<IEnumerable<IRow>>(RowFormatter.Register, "text/html");
 
-            var termsCommand = new Command("#!terms", "Display terms")
+            var termsCommand = new Command("#!terms", "Display Darwin Core standard terms")
             {
                 Handler = CommandHandler.Create((KernelInvocationContext invocationContext) =>
                 {
