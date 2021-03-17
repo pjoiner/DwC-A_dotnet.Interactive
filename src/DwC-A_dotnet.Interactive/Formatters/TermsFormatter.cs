@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Xml;
 using Core.DwC_A.Terms;
 using Microsoft.AspNetCore.Html;
-using Microsoft.DotNet.Interactive.Formatting;
+using static Microsoft.DotNet.Interactive.Formatting.PocketViewTags;
 
 namespace DwC_A.Interactive.Formatters
 {
@@ -15,26 +15,28 @@ namespace DwC_A.Interactive.Formatters
         {
             var dictionary = LoadXmlDocumentation();
 
-            var header = PocketViewTags.tr(new[]
+            var header = tr(new[]
             {
-                PocketViewTags.td("Name"),
-                PocketViewTags.td("Term"),
-                PocketViewTags.td("Description")
+                td("Name"),
+                td("Term"),
+                td("Description")
             });
             var rows = new List<dynamic>();
             foreach(var field in typeof(Terms).GetFields())
             {
-                rows.Add(PocketViewTags.tr(new[]
+                var value = field.GetValue(null).ToString();
+                var description = dictionary.ContainsKey(value) ? dictionary[value] : "";
+                rows.Add(tr(new[]
                 {
-                    PocketViewTags.td(new HtmlString($"{field.Name}")),
-                    PocketViewTags.td(field.GetValue(null)),
-                    PocketViewTags.td(dictionary[field.GetValue(null).ToString()])
+                    td(field.Name),
+                    td(new HtmlString($"<a href=\"{value}\">{value}</a>")),
+                    td(description)
                 }));
             }
 
-            var t = PocketViewTags.table(
-                PocketViewTags.thead(header),
-                PocketViewTags.tbody(rows));
+            var t = table(
+                thead(header),
+                tbody(rows));
             writer.Write(t);
         }
 

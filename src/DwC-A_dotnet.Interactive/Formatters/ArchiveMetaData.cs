@@ -1,10 +1,10 @@
 ﻿extern alias Core;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Html;
-using Microsoft.DotNet.Interactive.Formatting;
 using System.IO;
 using Core.DwC_A.Meta;
+
+using static Microsoft.DotNet.Interactive.Formatting.PocketViewTags;
 
 namespace DwC_A.Interactive.Formatters
 {
@@ -12,35 +12,36 @@ namespace DwC_A.Interactive.Formatters
     {
         public static void Register(Archive archive, TextWriter writer)
         {
-            var header = PocketViewTags.tr(new[]
+            var header = tr(new[]
             {
-                PocketViewTags.td("File Type"),
-                PocketViewTags.td("File Name"),
-                PocketViewTags.td("Row Type")
+                td("File Type"),
+                td("File Name"),
+                td("Row Type")
             });
             var rows = new List<dynamic>();
-            rows.Add(PocketViewTags.tr(new[]
+            rows.Add(tr(new[]
             {
-                PocketViewTags.td(new HtmlString("<b>CoreFile:</b>")),
-                PocketViewTags.td(Path.GetFileName(archive.Core.Files.FirstOrDefault())),
-                PocketViewTags.td(archive.Core.RowType)
-            }));
-            rows.Add(PocketViewTags.tr(new[]
-            {
-                PocketViewTags.td(new HtmlString("<b>Metadata:</b>")),
-                PocketViewTags.td(archive.Metadata)
+                td(b("CoreFile")),
+                td(Path.GetFileName(archive.Core.Files.FirstOrDefault())),
+                td(archive.Core.RowType)
             }));
             rows.AddRange(archive.Extension
                     .Select(e =>
-                        PocketViewTags.tr(new[]
+                        tr(new[]
                         {
-                            PocketViewTags.td(new HtmlString("<b>Extension:</b>")),
-                            PocketViewTags.td(Path.GetFileName(e.Files.FirstOrDefault())),
-                            PocketViewTags.td(e.RowType)
+                            td(b("Extension:")),
+                            td(Path.GetFileName(e.Files.FirstOrDefault())),
+                            td(e.RowType)
                         })));
-            var t = PocketViewTags.table(
-                        PocketViewTags.thead(header),
-                        PocketViewTags.tbody(rows));
+            rows.Add(tr(new[]
+            {
+                td(b("Metadata:")),
+                td(archive.Metadata),
+                td("")
+            }));
+            var t = table(
+                        thead(header),
+                        tbody(rows));
             writer.Write(t);
         }
     }

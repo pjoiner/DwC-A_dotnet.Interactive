@@ -1,10 +1,11 @@
 ﻿extern alias Core;
 using Microsoft.AspNetCore.Html;
-using Microsoft.DotNet.Interactive.Formatting;
 using System.Collections.Generic;
 using System.IO;
 using Core.DwC_A;
 using Core.DwC_A.Terms;
+
+using static Microsoft.DotNet.Interactive.Formatting.PocketViewTags;
 
 namespace DwC_A.Interactive.Formatters
 {
@@ -14,27 +15,31 @@ namespace DwC_A.Interactive.Formatters
         {
             writer.Write(new HtmlString($"<b>FileName</b>: {Path.GetFileName(fileReader.FileName)}<br/>"));
             writer.Write(new HtmlString($"<b>RowType</b>: {fileReader.FileMetaData.RowType}"));
-            var header = PocketViewTags.tr(new[]{
-                PocketViewTags.td("Index"),
-                PocketViewTags.td("Name"),
-                PocketViewTags.td("Term"),
-                PocketViewTags.td("Vocabulary")
+            var header = tr(new[]{
+                td("Index"),
+                td("Name"),
+                td("Term"),
+                td("Vocabulary"),
+                td("Default"),
+                td("Delimiter")
             });
             var rows = new List<dynamic>();
             foreach (var field in fileReader.FileMetaData.Fields)
             {
-                var row = PocketViewTags.tr(new[]
+                var row = tr(new[]
                 {
-                    PocketViewTags.td(field.Index),
-                    PocketViewTags.td(Terms.ShortName(field.Term)),
-                    PocketViewTags.td(field.Term),
-                    PocketViewTags.td(field.Vocabulary)
+                    td(field.Index),
+                    td(Terms.ShortName(field.Term)),
+                    td(new HtmlString($"<a href=\"{field.Term}\">{field.Term}</a>")),
+                    td(field.Vocabulary),
+                    td(field.Default),
+                    td(field.DelimitedBy)
                 });
                 rows.Add(row);
             }
-            var t = PocketViewTags.table(
-                PocketViewTags.thead(header),
-                PocketViewTags.tbody(rows)
+            var t = table(
+                thead(header),
+                tbody(rows)
             );
             writer.Write(t);
         }
