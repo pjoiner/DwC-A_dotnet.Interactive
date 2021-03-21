@@ -79,7 +79,9 @@ RUN echo "$PATH"
 RUN dotnet interactive jupyter install
 
 # Enable telemetry once we install jupyter for the image
-ENV DOTNET_INTERACTIVE_CLI_TELEMETRY_OPTOUT=false
-
+ENV DOTNET_INTERACTIVE_CLI_TELEMETRY_OPTOUT=false \
+# Don't skip so we can use DwC-A_dotnet.xml
+    NUGET_XMLDOC_MODE=none
+    
 # Set root to notebooks
 WORKDIR ${HOME}/notebooks/
