@@ -45,7 +45,11 @@ namespace DwC_A.Interactive.Formatters
             var dictionary = new Dictionary<string, string>();
             var assembly = Assembly.GetAssembly(typeof(Terms));
             var fileName = Path.ChangeExtension(assembly.Location, "xml");
-
+            if(!File.Exists(fileName))
+            {
+                throw new FileNotFoundException("If you are running this command inside a container make sure to set environment variable NUGET_XMLDOC_MODE=none to enable XML documentation for packages",
+                    fileName);
+            }
             var document = new XmlDocument();
             document.Load(fileName);
             var nodes = document.SelectNodes("//*[contains(@name, 'F:DwC_A.Terms.Terms')]");
