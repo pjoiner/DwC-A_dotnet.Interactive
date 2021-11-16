@@ -15,6 +15,7 @@ namespace DwC_A.Interactive
     {
         public Task OnLoadAsync(Kernel kernel)
         {
+            Formatter.Register<ArchiveReader>(ArchiveMetaData.RegisterForArchiveReader, "text/html");
             Formatter.Register<Archive>(ArchiveMetaData.Register, "text/html");
             Formatter.Register<IFileReader>(FileReaderMetaData.Register, "text/html");
             Formatter.Register<DefaultTerms>(TermsFormatter.Register, "text/html");

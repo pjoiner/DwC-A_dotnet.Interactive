@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Core.DwC_A.Meta;
+using Core.DwC_A;
 
 using static Microsoft.DotNet.Interactive.Formatting.PocketViewTags;
 
@@ -10,6 +11,11 @@ namespace DwC_A.Interactive.Formatters
 {
     internal class ArchiveMetaData
     {
+        public static void RegisterForArchiveReader(ArchiveReader archiveReader, TextWriter writer)
+        {
+            Register(archiveReader.MetaData, writer);
+        }
+
         public static void Register(Archive archive, TextWriter writer)
         {
             var header = tr(new[]

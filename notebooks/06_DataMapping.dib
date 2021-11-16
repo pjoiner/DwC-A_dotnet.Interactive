@@ -10,7 +10,7 @@ We'll utilize the [DwC-A_dotnet.Mapping](https://github.com/pjoiner/DwC-A_dotnet
 
 #r "nuget:DwC-A_dotnet,0.6.0"
 #r "nuget:DwC-A_dotnet.Mapping,0.6.0"
-#r "nuget:DwC-A_dotnet.Interactive,0.1.8-Pre"
+#r "nuget:DwC-A_dotnet.Interactive,0.1.9-Pre"
 
 #!markdown
 
@@ -32,6 +32,8 @@ public class Occurrence
     public double Longitude {get; set;}
     public double Latitude {get; set;}
 }
+
+archive
 
 #!markdown
 
