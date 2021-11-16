@@ -1,0 +1,158 @@
+#!markdown
+
+# Formatting Output
+
+This notebook gives examples of various ways to format raw Darwin Core Archive data using [DwC-A_dotnet](https://github.com/pjoiner/DwC-A_dotnet) and and [DwC-A_dotnet.Interactive](https://github.com/pjoiner/DwC-A_dotnet.Interactive).
+
+First, we install the relevant libraries from Nuget.
+
+#!csharp
+
+#r "nuget:DwC-A_dotnet,0.6.0"
+#r "nuget:DwC-A_dotnet.Interactive,0.1.8-Pre"
+
+#!markdown
+
+## Open The Archive
+
+We open the archive using an `ArchiveReader` object as described in the Introduction notebook.  In this case we are using a dataset derived from a gbif query of butterflies of the family *Papilionidae*.  This archive contains occurrence and multimedia data which also includes images.
+
+For more information on this dataset see [https://doi.org/10.15468/dl.jdftqs](https://doi.org/10.15468/dl.jdftqs).
+
+#!csharp
+
+using DwC_A;
+using System.IO.Compression;
+using System.IO;
+
+var outputPath = "./data/Papilionidae";
+if(Directory.Exists(outputPath))
+    Directory.Delete(outputPath, true);
+ZipFile.ExtractToDirectory("./data/Papilionidae.zip", outputPath);
+var archive = new ArchiveReader(outputPath);
+archive.MetaData
+
+#!csharp
+
+var occurrence = archive.CoreFile;
+var multimedia = archive.Extensions.GetFileReaderByFileName("multimedia.txt");
+display(occurrence);
+display(multimedia);
+
+#!markdown
+
+## Registering A Formatter
+
+A Formatter may be registered to display a row or single element as shown in the next cell.  The easiest approach is to first define a record to hold the column or row information that is going to be displayed.
+
+The the PocketView api can be used to build more complex html.  For example the following cell creates a new record of type `ScientificName` and displays the genus and species in italics.
+
+#!csharp
+
+using Microsoft.DotNet.Interactive.Formatting;
+
+using static Microsoft.DotNet.Interactive.Formatting.PocketViewTags;
+
+public record ScientificName(string genus, string species);
+
+Formatter.Register<ScientificName>((scientificName, writer) => {
+    var output = div[style: "font-style: italic"]($"{scientificName.genus} {scientificName.species}");
+    writer.Write(output);
+}, "text/html" );
+
+#!markdown
+
+## Scientific Name
+
+We can use the new ScientificName record type to format Occurrence data as follows.
+
+#!csharp
+
+using DwC_A.Terms;
+
+occurrence.DataRows.Take(10)
+    .Select(n => new{
+        date = n[Terms.eventDate],
+        scientificName = new ScientificName(n[Terms.genus], n[Terms.specificEpithet])
+    })
+
+#!markdown
+
+## Links
+
+We can register a link formatter as well to provide create clickable urls.
+
+#!csharp
+
+public record Link(string url);
+
+Formatter.Register<Link>((link, writer) =>{
+    var linkHtml = a[href: link.url](link.url);
+    writer.Write(linkHtml);
+}, "text/html");
+
+occurrence.DataRows.Take(10)
+    .Select(n => new{
+        date = n[Terms.eventDate],
+        scientificName = new ScientificName(n[Terms.genus], n[Terms.specificEpithet]),
+        link = new Link(n[Terms.references])
+    })
+
+#!markdown
+
+## Displaying Images
+
+The multimedia file of this archive contains links to images hosted on the web.  We can display those images inline with our queries by registering an image formatter.
+
+Here we will use the PocketView api to add styles to restrict the height of the displayed image to 100px and center the optional caption text.  The formatter is registered using a new `ImageUrl` record type.
+
+#!csharp
+
+public record ImageUrl(string url, string caption = "");
+
+Formatter.Register<ImageUrl>((image, writer) =>{
+    var fig = figure[style: "text-align: center; padding: 5px;"](
+        img[src: image.url, style: "height: 100px; margin-left: auto; margin-right: auto;"],
+        div[style: "font-style: italic"](image.caption)
+    );
+    writer.Write(fig);
+}, "text/html");
+
+#!markdown
+
+Finally, we use the `ImageUrl` record type in our query to display a list of images along with the scientific name.
+
+#!csharp
+
+using DwC_A.Terms;
+
+var gbifId = "http://rs.gbif.org/terms/1.0/gbifID";
+var identifier = "http://purl.org/dc/terms/identifier";
+
+var media = from o in occurrence.DataRows.Take(10)
+join m in multimedia.DataRows on o[gbifId] equals m[gbifId]
+select new{
+    date = o[Terms.eventDate],
+    link = new Link(o[Terms.references]),
+    image = new ImageUrl(m[identifier], o[Terms.scientificName])
+}; 
+
+media
+
+#!markdown
+
+## Creating a Gallery
+
+We can put this all together by registering a formatter for `IEnumerable<ImageUrl>` as follows and create a gallery of images.
+
+#!csharp
+
+Formatter.Register<IEnumerable<ImageUrl>>((images, writer) =>{
+    var figs = new List<dynamic>();
+        images.ToList().ForEach(image => {
+            figs.Add(div[style: "float: left"](image));
+        });
+    writer.Write(div(figs));
+}, "text/html");
+
+media.Select(n => n.image)

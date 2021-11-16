@@ -1,0 +1,71 @@
+#!markdown
+
+# Use DwC-A_dotnet with F#
+
+DwC-A_dotnet can be used with F# as well as C#.  The NuGet library installation and ArchiveReader/FileReader formatters work in the same way as they do for C#.
+
+Here we'll use the Papilionidae dataset to demonstrate reading latitude and longitude information from the occurrence data file and plot it on a map of Texas with Plotly.
+
+**Import Note:** If you are using this notebook from Binder make sure to select **Kernel -> Change Kernel -> .NET (F#)** before running any of the cells below.
+
+#!fsharp
+
+#r "nuget:Plotly.NET,2.0.0-preview.15"
+#r "nuget:Plotly.NET.Interactive,2.0.0-preview.15"
+#r "nuget:FSharp.Data,4.2.5"
+#r "nuget:DwC-A_dotnet,0.6.0"
+#r "nuget:DwC-A_dotnet.Interactive,0.1.8-Pre"
+
+#!fsharp
+
+open DwC_A
+open DwC_A.Terms
+open DwC_A.Factories
+open DwC_A.Config
+open System.IO
+
+let archiveFile = "./data/Papilionidae.zip"
+let factory = new DefaultFactory(fun cfg -> 
+    cfg.Add<ArchiveFolderConfiguration>( fun cfg -> 
+        cfg.OutputPath <- "./Papilionidae"
+        if(Directory.Exists(cfg.OutputPath)) then
+            Directory.Delete(cfg.OutputPath, true) ))
+let archive = new ArchiveReader(archiveFile, factory);
+
+let occurrence = archive.CoreFile;
+occurrence
+
+#!fsharp
+
+open System.Linq
+open Plotly.NET
+
+let lonlat = occurrence.DataRows
+                    .Where(fun row -> row.[Terms.decimalLongitude] <> null && row.[Terms.decimalLatitude] <> null)
+                    .Select(fun row -> ( $"{row.[Terms.genus]} {row.[Terms.specificEpithet]}", 
+                                            row.[Terms.decimalLongitude] |> double, 
+                                            row.[Terms.decimalLatitude] |> double) )
+                    .GroupBy(fun row -> match row with (a, b, c) -> a)
+                    .Select(fun group -> (group.Key, group.Select(fun row -> match row with (a, b, c) -> (b, c))))
+
+let geo = lonlat.Select(fun row -> 
+                            match row with (a, b) -> 
+                                            Chart.ScatterGeo(b, 
+                                                mode=StyleParam.Mode.Markers,
+                                                ShowLegend = true)
+                                                |> Chart.withMarkerStyle(Size = 2) 
+                                                |> Chart.withTraceName(a))
+                                                |> Chart.combine
+
+let map = geo |> Chart.withGeoStyle(
+                FitBounds = StyleParam.GeoFitBounds.GeoJson,
+                Scope = StyleParam.GeoScope.Usa,
+                ShowLakes = true,
+                ShowRivers = true,
+                ShowLand = true,
+                LandColor = Color.fromHex("#f1f1f1")
+            )
+            |> Chart.withSize(height = 500.0, width = 800.0)
+            |> Chart.withTitle(title = "Papilionidae of Texas")
+
+map                 
