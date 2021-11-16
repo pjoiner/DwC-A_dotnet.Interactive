@@ -1,0 +1,65 @@
+#!markdown
+
+# Data Conversion and Mapping
+
+File data fields can be converted to strongly typed objects using one of the Convert extension methods of the IRow interface.  Documentation can be found [here](https://github.com/pjoiner/DwC-A_dotnet/wiki/Type-Conversion).
+
+We'll utilize the [DwC-A_dotnet.Mapping](https://github.com/pjoiner/DwC-A_dotnet.Mapping) extension library to map IRow fields to a model class.
+
+#!csharp
+
+#r "nuget:DwC-A_dotnet,0.6.0"
+#r "nuget:DwC-A_dotnet.Mapping,0.6.0"
+#r "nuget:DwC-A_dotnet.Interactive,0.1.8-Pre"
+
+#!markdown
+
+## Model Class
+
+First create the class that you wish to map values to.  In this instance we are going to create an Occurrence class to display the scientific name and coordinates of the observation.
+
+#!csharp
+
+using DwC_A;
+
+var outputPath = "./data/Papilionidae";
+var archive = new ArchiveReader(outputPath);
+
+public class Occurrence
+{
+    public string Id {get; set;}
+    public string ScientificName {get; set;}
+    public double Longitude {get; set;}
+    public double Latitude {get; set;}
+}
+
+#!markdown
+
+## Mapper
+
+Next we create a mapper and define a method for mapping the fields of the IRow to the class.
+
+#!csharp
+
+using DwC_A.Mapping;
+using DwC_A.Terms;
+using DwC_A.Extensions;
+
+var mapper = MapperFactory.CreateMapper<Occurrence>((o, row) => {
+    o.Id = row["http://rs.gbif.org/terms/1.0/gbifID"];
+    o.ScientificName = row[Terms.scientificName];
+    o.Longitude = row.Convert<double>(Terms.decimalLongitude);
+    o.Latitude = row.Convert<double>(Terms.decimalLatitude);
+});
+
+#!markdown
+
+## Map
+
+Finally, we map the data using the Map methods of either the IRow or IFileReader interfaces.
+
+#!csharp
+
+archive.CoreFile
+    .Map<Occurrence>(mapper)
+    .Take(10)
