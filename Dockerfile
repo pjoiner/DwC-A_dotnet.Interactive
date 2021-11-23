@@ -57,7 +57,7 @@ RUN dotnet_sdk_version=6.0.100 \
 COPY ./notebooks/ ${HOME}/notebooks/
 
 # Copy package sources
-COPY ./Nuget.config ${HOME}/nuget.config
+COPY ./NuGet.config ${HOME}/nuget.config
 
 RUN chown -R ${NB_UID} ${HOME}
 USER ${USER}
@@ -79,5 +79,5 @@ ENV DOTNET_INTERACTIVE_CLI_TELEMETRY_OPTOUT=false \
 # Don't skip so we can use DwC-A_dotnet.xml
     NUGET_XMLDOC_MODE=none
     
-# Set root to Notebooks
+# Set root to notebooks
 WORKDIR ${HOME}/notebooks/
