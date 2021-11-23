@@ -82,5 +82,5 @@ ENV DOTNET_INTERACTIVE_CLI_TELEMETRY_OPTOUT=false \
 # Don't skip so we can use DwC-A_dotnet.xml
     NUGET_XMLDOC_MODE=none
     
-# Set root to Notebooks
+# Set root to notebooks
 WORKDIR ${HOME}/notebooks/
