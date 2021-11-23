@@ -1,3 +1,6 @@
+# See this for running locally
+# https://mybinder.readthedocs.io/en/latest/tutorials/dockerfile.html
+
 FROM jupyter/base-notebook:latest
 
 # Install .NET CLI dependencies
@@ -57,7 +60,7 @@ RUN dotnet_sdk_version=6.0.100 \
 COPY ./notebooks/ ${HOME}/notebooks/
 
 # Copy package sources
-COPY ./Nuget.config ${HOME}/nuget.config
+COPY ./NuGet.config ${HOME}/nuget.config
 
 RUN chown -R ${NB_UID} ${HOME}
 USER ${USER}
