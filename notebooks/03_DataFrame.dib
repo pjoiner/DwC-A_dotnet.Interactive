@@ -1,0 +1,143 @@
+#!markdown
+
+# Using DataFrame and Plotly
+
+This notebook demonstrates using [DwC-A_dotnet](https://github.com/pjoiner/DwC-A_dotnet) with the [Microsoft.Data.Analysis](https://github.com/dotnet/machinelearning) framework and [XPlot Plotly](https://www.nuget.org/packages/XPlot.Plotly/). 
+
+First we'll load the required libraries.
+
+#!csharp
+
+#r "nuget: XPlot.Plotly, 4.0.6"
+#r "nuget: XPlot.Plotly.Interactive, 4.0.6"
+#r "nuget: Microsoft.Data.Analysis, 0.19.0"
+#r "nuget: DwC-A_dotnet, 0.6.0"
+#r "nuget: DwC-a_dotnet.Interactive, 0.1.8-Pre"
+
+#!markdown
+
+## Formatting DataFrame for Display
+
+The following cell is used to register a DataFrame formatter for subsequent opterations so we can display our DateFrame objects.
+
+#!csharp
+
+using Microsoft.AspNetCore.Html;
+using Microsoft.DotNet.Interactive.Formatting;
+using Microsoft.Data.Analysis;
+
+using static Microsoft.DotNet.Interactive.Formatting.PocketViewTags;
+
+Formatter.Register<DataFrame>((df, writer) =>
+{
+    var headers = new List<IHtmlContent>();
+    headers.Add(th(i("index")));
+    headers.AddRange(df.Columns.Select(c => (IHtmlContent) th(c.Name)));
+    var rows = new List<List<IHtmlContent>>();
+    var take = 20;
+    for (var i = 0; i < Math.Min(take, df.Rows.Count); i++)
+    {
+        var cells = new List<IHtmlContent>();
+        cells.Add(td(i));
+        foreach (var obj in df.Rows[i])
+        {
+            cells.Add(td(obj));
+        }
+        rows.Add(cells);
+    }
+
+    var t = table(
+        thead(
+            headers),
+        tbody(
+            rows.Select(
+                r => tr(r))));
+
+    writer.Write(t);
+}, "text/html");
+
+#!markdown
+
+## Loading Archive
+
+We are going to use our [rooftop data set](https://www.gbif.org/dataset/f506be53-9221-4b44-a41d-5aa0905ec216) and query for the eventID of a sampling event from the CoreFile of the archive.
+
+#!csharp
+
+using DwC_A;
+using DwC_A.Terms;
+using DwC_A.Config;
+using DwC_A.Factories;
+using System.IO;
+
+var archiveFile = "./data/dwca-rooftop-v1.4.zip";
+var factory = new DefaultFactory(cfg => {
+    cfg.Add<ArchiveFolderConfiguration>(cfg => {
+        cfg.OutputPath = "./dwca-rooftop-v1.4";
+        if(Directory.Exists(cfg.OutputPath)){
+            Directory.Delete(cfg.OutputPath, true);
+        }
+    });
+});
+var archive = new ArchiveReader(archiveFile, factory);
+var eventFile = archive.CoreFile;
+var occurrence = archive.Extensions.GetFileReaderByFileName("occurrence.txt");
+
+var eventID = eventFile.DataRows.Skip(2).Select(row => row[Terms.eventID]).First();
+display(eventID);
+
+#!markdown
+
+## Convert IRow Collection to DataFrame
+
+Once we have an eventID we can query the occurrence data for that event using LinQ and load the results directly into some DataFrame columns.  We are just creating columns for the species name and count of species from the occurrence data.
+
+#!csharp
+
+using Microsoft.Data.Analysis;
+
+var species = new StringDataFrameColumn("species", 0);
+var counts = new PrimitiveDataFrameColumn<int>("count");
+
+occurrence.DataRows
+    .Where(row => row[Terms.eventID] == eventID)
+    .OrderBy(row => row[Terms.scientificName])
+    .ToList()
+    .ForEach(row => {
+        species.Append(row[Terms.scientificName]);
+        counts.Append(int.Parse(row[Terms.individualCount]));
+    });
+
+var df = new DataFrame(species, counts);
+df.Info()
+
+#!markdown
+
+## Using DataFrame
+
+Now we can perform calculations on the data in our DataFrame object.  For example, we can calculate the [Simpson Diversity Index](https://en.wikipedia.org/wiki/Diversity_index) for this sampling event using the following formula.
+
+$D = 1 - \frac {\sum_{}n(n-1)} {N(N-1)}$
+
+#!csharp
+
+var sum = (int)counts.Sum();
+double D = 1 - (double)(int)(counts.Apply(n => n * (n - 1)).Sum()) / (sum * (sum - 1));
+display($"D = {D:0.00}")
+
+#!markdown
+
+## Plotly
+
+We can also use XPlot Plotly to display a column chart of our dataset.
+
+#!csharp
+
+using XPlot.Plotly;
+
+var kvp = df.Rows
+    .AsEnumerable()
+    .Select(row => Tuple.Create<string, int>(row[0].ToString(), (int)row[1]));
+var chart = Chart.Column(kvp);
+chart.WithTitle($"Event: {eventID}");
+display(chart)

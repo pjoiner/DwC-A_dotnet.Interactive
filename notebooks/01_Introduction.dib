@@ -1,0 +1,129 @@
+#!markdown
+
+# Using DwC-A_dotnet.Interactive
+
+This notebook describes how to use DwC-A_dotnet and DwC-A_dotnet.Interactive to work with Darwin Core Archive files.
+
+Information on the dotnet libraries used here may be found at 
+
+|Library|Link|
+|---|---|
+|DwC-A_dotnet|https://github.com/pjoiner/DwC-A_dotnet|
+|DwC-A_dotnet.Interactive|https://github.com/pjoiner/DwC-A_dotnet.Interactive|
+
+Information on Darwin Core Archives may be found [here](https://dwc.tdwg.org/).
+
+#!markdown
+
+## Installation
+
+Use the #r magic command to install the libraries from NuGet.
+
+#!csharp
+
+#r "nuget:DwC-A_dotnet,0.6.0"
+#r "nuget:DwC-A_dotnet.Interactive,0.1.8-Pre"
+
+#!markdown
+
+## Open An Archive
+Use the `ArchiveReader` class to open the archive and provide the path to your archive.  It is recommended that the archive be unzipped to a directory first to reduce the overhead of creating a temporary folder to unzip the archive.  If you use the zip file remember to dispose of the temporary working directory at the end of your session by calling `archive.Dispose();`
+
+The test data we are using comes from the ["Insects from light trap (1992–2009), rooftop Zoological Museum, Copenhagen"](https://www.gbif.org/dataset/f506be53-9221-4b44-a41d-5aa0905ec216) dataset available for download from [gbif.org](https://www.gbif.org/).
+
+#!csharp
+
+using DwC_A;
+using System.IO.Compression;
+using System.IO;
+
+var outputPath = "./data/dwca-rooftop-v1.4";
+if(Directory.Exists(outputPath)) 
+    Directory.Delete(outputPath, true);
+ZipFile.ExtractToDirectory("./data/dwca-rooftop-v1.4.zip", outputPath);
+var archive = new ArchiveReader(@"./data/dwca-rooftop-v1.4");
+
+#!markdown
+
+## Archive MetaData
+The interactive extensions library (`DwC-A_dotnet.Interactive`) registers kernel extensions to display various archive metadata by using the `display()` command or simply entering the object you are interested in at the end of a cell without a semicolon on the end.  For example, to view the metadata for an archive enter `<archiveName>.MetaData` as shown below.  The same can be done for an `IFileReader` instance to get a list of the term metadata for a file.
+
+#!csharp
+
+archive.MetaData
+
+#!csharp
+
+archive.CoreFile
+
+#!csharp
+
+archive.Extensions.GetFileReaderByFileName("occurrence.txt")
+
+#!markdown
+
+## Displaying Data
+
+Data from a file can be displayed using the `DataRows` property of an `IFileReader`.  For example, the first 10 rows of the Core event file from the sample archive can be displayed as follows.
+
+#!csharp
+
+archive.CoreFile.DataRows.Take(50)
+
+#!markdown
+
+## Accessing Individual Fields
+
+The DataRows property of a FileReader can be enumerated using a `foreach` loop or LinQ queries.  The individual fields of each row can be accessed by using an index or the name of the term associated with the field or column.
+
+Use the Terms class of the `DwC_A.Terms` namespace as a shortcut to typing in the fully qualified name of the term.
+
+#!csharp
+
+using DwC_A.Terms;
+
+foreach(var row in archive.CoreFile.DataRows.Take(1))
+{
+    Console.Write($"type: {row[1]}\t"); //Use the index value to get the type column
+    Console.Write($"EventID: {row["http://rs.tdwg.org/dwc/terms/eventID"]}\t"); //USe the fully qualified name of the term
+    Console.WriteLine($"Event Date: {row[Terms.eventDate]}"); //Use the Terms class
+}
+
+#!markdown
+
+## The Terms Command
+
+Use the `#!terms` magic command to list the available terms and a brief explanation of their use.
+
+#!csharp
+
+#!terms
+
+#!markdown
+
+## Query Data Using LinQ
+
+The following cell uses LinQ to gather a list of total individual counts of each genus for a specific sampling event.  Change the number in the `.Skip(1)` line to see totals calculated for other events. 
+
+#!csharp
+
+using DwC_A.Terms;
+
+//Retrieve the eventID from the event data file
+var eventID = archive.CoreFile.DataRows
+    .Skip(5)  //Change this number and run the cell again and to see the data for a new eventID
+    .Take(1)
+    .First()[Terms.eventID];
+
+//Get an IFileReader for the occurrence data file
+var occurrences = archive.Extensions.GetFileReaderByFileName("occurrence.txt");
+
+var data = occurrences.DataRows
+    .Where(n => n[Terms.eventID] == eventID)
+    .GroupBy(n => n[Terms.genus])
+    .Select(g => new{
+        Genus = g.Key,
+        Count = g.Sum(c => int.Parse(c[Terms.individualCount])) 
+    }); 
+
+data
