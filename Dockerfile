@@ -1,3 +1,6 @@
+# See this for running locally
+# https://mybinder.readthedocs.io/en/latest/tutorials/dockerfile.html
+
 FROM jupyter/base-notebook:latest
 
 # Install .NET CLI dependencies
