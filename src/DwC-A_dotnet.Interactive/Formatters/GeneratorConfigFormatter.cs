@@ -46,6 +46,7 @@ namespace DwC_A.Interactive.Formatters
 
             writer.Write( 
                 div(
+                    div(h3("Options")),
                     div(mainTable), 
                     div(h3("Properties")),
                     div(propertyTable)
