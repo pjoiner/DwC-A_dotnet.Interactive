@@ -9,10 +9,14 @@ namespace DwC_A.Interactive.Mapping
         private const string ExtensionNamespace = "DwC_A.Extensions";
         private const string SystemNamespace = "System";
         private const string CoreNamespace = "DwC_A";
+        private const string AllTerms = "*";
 
         internal class GeneratorConfiguration : IGeneratorConfiguration
         {
-            private Dictionary<string, PropertyConfiguration> properties = new Dictionary<string, PropertyConfiguration>();
+            private Dictionary<string, PropertyConfiguration> properties = new Dictionary<string, PropertyConfiguration>()
+            {
+                { AllTerms, new PropertyConfiguration() }
+            };
             private HashSet<string> usings = new HashSet<string>(new[] { SystemNamespace });
             public string Namespace { get; set; } = "";
             public string Output { get; set; } = "";
@@ -25,7 +29,7 @@ namespace DwC_A.Interactive.Mapping
             {
                 return Properties.ContainsKey(term) ? 
                     Properties[term] : 
-                    new PropertyConfiguration();
+                    Properties[AllTerms];
             }
             internal void AddUsing(string namespaceName)
             {
