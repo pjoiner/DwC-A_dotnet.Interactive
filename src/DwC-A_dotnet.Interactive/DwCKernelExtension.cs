@@ -8,6 +8,8 @@ using DwC_A.Interactive.Formatters;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Collections.Generic;
+using DwC_A.Interactive.Commands;
+using DwC_A.Config;
 
 namespace DwC_A.Interactive
 {
@@ -20,17 +22,10 @@ namespace DwC_A.Interactive
             Formatter.Register<IFileReader>(FileReaderMetaData.Register, "text/html");
             Formatter.Register<DefaultTerms>(TermsFormatter.Register, "text/html");
             Formatter.Register<IEnumerable<IRow>>(RowFormatter.Register, "text/html");
+            Formatter.Register<IGeneratorConfiguration>(GeneratorConfigFormatter.Register, "text/html");
 
-            var termsCommand = new Command("#!terms", "Display Darwin Core standard terms")
-            {
-                Handler = CommandHandler.Create((KernelInvocationContext invocationContext) =>
-                {
-                    var defaultTerms = new DefaultTerms();
-                    invocationContext.Display(defaultTerms);
-                })
-            };
-
-            kernel.AddDirective(termsCommand);
+            kernel.AddDirective(new TermsCommand());
+            kernel.AddDirective(new DwcaCodegenCommand());
 
             return Task.CompletedTask;
         }
