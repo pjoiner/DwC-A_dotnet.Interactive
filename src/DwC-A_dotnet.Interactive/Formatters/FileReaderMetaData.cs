@@ -26,11 +26,16 @@ namespace DwC_A.Interactive.Formatters
             var rows = new List<dynamic>();
             foreach (var field in fileReader.FileMetaData.Fields)
             {
+                var name = span(Terms.ShortName(field.Term));
+                if(fileReader.FileMetaData.Id.IndexSpecified && fileReader.FileMetaData.Id.Index == field.Index)
+                {
+                    name = span(name, sup(b("*")));
+                }
                 var row = tr(new[]
                 {
                     td(field.Index),
-                    td(Terms.ShortName(field.Term)),
-                    td(new HtmlString($"<a href=\"{field.Term}\">{field.Term}</a>")),
+                    td(name),
+                    td(a[href:field.Term](field.Term)),
                     td(field.Vocabulary),
                     td(field.Default),
                     td(field.DelimitedBy)
@@ -39,7 +44,8 @@ namespace DwC_A.Interactive.Formatters
             }
             var t = table(
                 thead(header),
-                tbody(rows)
+                tbody(rows),
+                tfoot(tr(td(span(sup(b("*")), "Indicates index column"))))
             );
             writer.Write(t);
         }

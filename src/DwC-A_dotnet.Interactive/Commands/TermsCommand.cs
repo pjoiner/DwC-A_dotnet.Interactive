@@ -1,7 +1,7 @@
 ﻿using Microsoft.DotNet.Interactive;
 using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 
 namespace DwC_A.Interactive.Commands
 {

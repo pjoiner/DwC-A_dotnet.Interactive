@@ -20,12 +20,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DwC-A_dotnet" Version="0.6.0">
+    <PackageReference Include="DwC-A_dotnet" Version="0.6.1">
       <Aliases>Core</Aliases>
     </PackageReference>
     <PackageReference Include="DwC-A_dotnet.Mapping" Version="0.6.3" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-*" />
-    <PackageReference Include="microsoft.dotnet.interactive" Version="1.0.0-beta.21575.1" />
+    <PackageReference Include="microsoft.dotnet.interactive" Version="1.0.0-beta.22070.1" />
+    <PackageReference Include="System.CommandLine.NamingConventionBinder" Version="2.0.0-beta2.22071.1" />
   </ItemGroup>
 
   <ItemGroup>
