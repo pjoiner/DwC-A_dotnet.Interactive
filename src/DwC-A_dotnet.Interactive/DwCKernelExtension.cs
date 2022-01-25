@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Core.DwC_A;
 using Core.DwC_A.Meta;
 using DwC_A.Interactive.Formatters;
-using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Collections.Generic;
 using DwC_A.Interactive.Commands;
 using DwC_A.Config;
@@ -24,8 +22,8 @@ namespace DwC_A.Interactive
             Formatter.Register<IEnumerable<IRow>>(RowFormatter.Register, "text/html");
             Formatter.Register<IGeneratorConfiguration>(GeneratorConfigFormatter.Register, "text/html");
 
-            kernel.AddDirective(new TermsCommand());
-            kernel.AddDirective(new DwcaCodegenCommand());
+            kernel.AddDirective(TermsCommandFactory.Create());
+            kernel.AddDirective(DwcaCodegenCommandFactory.Create());
 
             return Task.CompletedTask;
         }

@@ -9,30 +9,29 @@ using Microsoft.DotNet.Interactive.Events;
 using Microsoft.DotNet.Interactive.ValueSharing;
 using System;
 using System.CommandLine;
-using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace DwC_A.Interactive.Commands
 {
-    internal class DwcaCodegenCommand : Command
+    internal static class DwcaCodegenCommandFactory
     {
-        public DwcaCodegenCommand()
-            : base("#!dwca-codegen", "Generate strongly typed class files for Darwin Core Archive")
+        public static Command Create()
         {
-            AddArgument(new Argument<string>()
+            var command = new Command("#!dwca-codegen", "Generate strongly typed class files for Darwin Core Archive");
+            command.AddArgument(new Argument<string>()
             {
                 Name = "archivePath",
                 Description = "Path to archive folder or zip file"
             });
 
-            AddOption(new Option<string>(
+            command.AddOption(new Option<string>(
                 aliases: new[] {"-c", "--configName"},
                 description: "Name of configuration variable",
                 getDefaultValue: () => ""
             ));
 
-            Handler = CommandHandler.Create<KernelInvocationContext, string, string>((Func<KernelInvocationContext, string, string, Task>)(async (context, archivePath, configName) =>
+            command.SetHandler((Func<KernelInvocationContext, string, string, Task>)(async (context, archivePath, configName) =>
             {
                 var archive = new ArchiveReader(archivePath);
 
@@ -44,12 +43,14 @@ namespace DwC_A.Interactive.Commands
                 context.Display($"Opening archive {archive.FileName} using configuration", new[] { "text/html" });
                 context.Display(config, new[] { "text/html" });
 
-                await GenerateClass(context, archive.CoreFile, config);
+                await DwcaCodegenCommandFactory.GenerateClass(context, archive.CoreFile, config);
                 foreach(var extension in archive.Extensions.GetFileReaders())
                 {
-                    await GenerateClass(context, extension, config);
+                    await DwcaCodegenCommandFactory.GenerateClass(context, extension, config);
                 }
             }));
+
+            return command;
         }
 
         private static async Task GenerateClass(KernelInvocationContext context, 

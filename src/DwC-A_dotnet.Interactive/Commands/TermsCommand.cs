@@ -1,19 +1,20 @@
 ﻿using Microsoft.DotNet.Interactive;
 using System;
 using System.CommandLine;
-using System.CommandLine.NamingConventionBinder;
 
 namespace DwC_A.Interactive.Commands
 {
-    internal class TermsCommand : Command
+    internal static class TermsCommandFactory
     {
-        public TermsCommand() : base("#!terms", "Display Darwin Core standard terms")
+        public static Command Create()
         {
-            Handler = CommandHandler.Create((KernelInvocationContext invocationContext) =>
+            var termsCmd = new Command("#!terms", "Display Darwin Core standard terms");
+            termsCmd.SetHandler((KernelInvocationContext invocationContext) =>
             {
                 var defaultTerms = new DefaultTerms();
                 invocationContext.Display(defaultTerms);
             });
+            return termsCmd;
         }
     }
 }
