@@ -27,9 +27,9 @@ namespace DwC_A.Interactive.Formatters
             foreach(var row in rows)
             {
                 var cells = new List<dynamic>();
-                foreach(var field in row.Fields)
+                foreach(var metaData in fieldMetaData)
                 {
-                    cells.Add(td(field));
+                    cells.Add(td(row[metaData.Term]));
                 }
                 rowList.Add(tr(cells));
             }

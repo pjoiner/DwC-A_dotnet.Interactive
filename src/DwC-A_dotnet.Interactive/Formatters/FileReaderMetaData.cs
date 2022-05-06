@@ -27,13 +27,13 @@ namespace DwC_A.Interactive.Formatters
             foreach (var field in fileReader.FileMetaData.Fields)
             {
                 var name = span(Terms.ShortName(field.Term));
-                if(fileReader.FileMetaData.Id.IndexSpecified && fileReader.FileMetaData.Id.Index == field.Index)
+                if(field.IndexSpecified && fileReader.FileMetaData.Id.Index == field.Index)
                 {
                     name = span(name, sup(b("*")));
                 }
                 var row = tr(new[]
                 {
-                    td(field.Index),
+                    td(field.IndexSpecified ? field.Index.ToString() : ""),
                     td(name),
                     td(a[href:field.Term](field.Term)),
                     td(field.Vocabulary),
