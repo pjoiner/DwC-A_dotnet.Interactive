@@ -4,17 +4,15 @@ using System.CommandLine;
 
 namespace DwC_A.Interactive.Commands
 {
-    internal static class TermsCommandFactory
+    internal class TermsCommand : Command
     {
-        public static Command Create()
+        public TermsCommand() : base("#!terms", "Display Darwin Core standard terms")
         {
-            var termsCmd = new Command("#!terms", "Display Darwin Core standard terms");
-            termsCmd.SetHandler((KernelInvocationContext invocationContext) =>
+            System.CommandLine.Handler.SetHandler(this, (invocationContext) =>
             {
                 var defaultTerms = new DefaultTerms();
-                invocationContext.Display(defaultTerms);
+                KernelInvocationContext.Current.Display(defaultTerms);
             });
-            return termsCmd;
         }
     }
 }

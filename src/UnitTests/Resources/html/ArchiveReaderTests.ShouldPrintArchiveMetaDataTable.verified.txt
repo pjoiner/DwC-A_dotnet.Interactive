@@ -1,0 +1,1 @@
+﻿<table><thead><tr><td>File Type</td><td>File Name</td><td>Row Type</td></tr></thead><tbody><tr><td><b>CoreFile</b></td><td>taxon.txt</td><td>http://rs.tdwg.org/dwc/terms/Taxon</td></tr><tr><td><b>Metadata:</b></td><td>eml.xml</td><td></td></tr></tbody></table>

@@ -22,8 +22,8 @@ namespace DwC_A.Interactive
             Formatter.Register<IEnumerable<IRow>>(RowFormatter.Register, "text/html");
             Formatter.Register<IGeneratorConfiguration>(GeneratorConfigFormatter.Register, "text/html");
 
-            kernel.AddDirective(TermsCommandFactory.Create());
-            kernel.AddDirective(DwcaCodegenCommandFactory.Create());
+            kernel.AddDirective(new TermsCommand());
+            kernel.AddDirective(new DwcaCodegenCommand());
 
             return Task.CompletedTask;
         }

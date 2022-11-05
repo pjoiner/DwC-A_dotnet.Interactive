@@ -1,29 +1,23 @@
-using Xunit;
 using DwC_A;
 using DwC_A.Interactive.Formatters;
-using System.IO;
 
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace UnitTests
 {
-    public class ArchiveReaderTests
+    [UsesVerify]
+    public class ArchiveReaderTests : IClassFixture<VerifyFixture>
     {
-        string whalesArchive = "./Resources/whales";
+        readonly string whalesArchive = "./Resources/whales";
 
         [Fact]
-        public void ShouldPrintArchiveMetaDataTable()
+        public async Task ShouldPrintArchiveMetaDataTable()
         {
-            var expected = File.ReadAllText("./Resources/html/archive.html");
-            using (var archive = new ArchiveReader(whalesArchive))
-            {
-                using(var writer = new StringWriter())
-                {
-                    ArchiveMetaData.Register(archive.MetaData, writer);
-                    var actual = writer.ToString();
-                    Assert.Equal(expected, actual);
-                }
-            }
+            using var archive = new ArchiveReader(whalesArchive);
+            using var writer = new StringWriter();
+            ArchiveMetaData.Register(archive.MetaData, writer);
+            var actual = writer.ToString();
+            await Verify(actual);
         }
     }
 }
