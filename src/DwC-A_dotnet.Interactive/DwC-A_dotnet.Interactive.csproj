@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>DwC_A.Interactive</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Copyright © Paul Joiner 2021</Copyright>
@@ -17,10 +17,11 @@
     <FileVersion>0.1.10.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <NoWarn>NU5100</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DwC-A_dotnet" Version="0.6.2">
+    <PackageReference Include="DwC-A_dotnet" Version="0.7.0">
       <Aliases>Core</Aliases>
     </PackageReference>
     <PackageReference Include="DwC-A_dotnet.Mapping" Version="0.6.3" />
@@ -36,10 +37,7 @@
   
   <ItemGroup>
     <None Include="$(OutputPath)/DwC-A_dotnet.Interactive.dll" Pack="true" PackagePath="interactive-extensions/dotnet" />
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <None Include="..\..\LICENSE"  Pack="true" PackagePath="\" />
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

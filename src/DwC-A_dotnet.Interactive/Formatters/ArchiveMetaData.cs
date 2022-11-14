@@ -24,13 +24,15 @@ namespace DwC_A.Interactive.Formatters
                 td("File Name"),
                 td("Row Type")
             });
-            var rows = new List<dynamic>();
-            rows.Add(tr(new[]
+            var rows = new List<dynamic>
             {
-                td(b("CoreFile")),
-                td(Path.GetFileName(archive.Core.Files.FirstOrDefault())),
-                td(archive.Core.RowType)
-            }));
+                tr(new[]
+                {
+                    td(b("CoreFile")),
+                    td(Path.GetFileName(archive.Core.Files.FirstOrDefault())),
+                    td(archive.Core.RowType)
+                })
+            };
             rows.AddRange(archive.Extension
                     .Select(e =>
                         tr(new[]

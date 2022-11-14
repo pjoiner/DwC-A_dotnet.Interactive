@@ -13,11 +13,11 @@ namespace DwC_A.Interactive.Mapping
 
         internal class GeneratorConfiguration : IGeneratorConfiguration
         {
-            private Dictionary<string, PropertyConfiguration> properties = new Dictionary<string, PropertyConfiguration>()
+            private readonly Dictionary<string, PropertyConfiguration> properties = new()
             {
                 { AllTerms, new PropertyConfiguration() }
             };
-            private HashSet<string> usings = new HashSet<string>(new[] { SystemNamespace });
+            private readonly HashSet<string> usings = new(new[] { SystemNamespace });
             public string Namespace { get; set; } = "";
             public string Output { get; set; } = "";
             public bool PascalCase { get; set; } = true;
@@ -27,8 +27,7 @@ namespace DwC_A.Interactive.Mapping
             public IList<string> Usings => usings.ToList();
             public PropertyConfiguration GetPropertyConfiguration(string term)
             {
-                return Properties.ContainsKey(term) ? 
-                    Properties[term] : 
+                return Properties.TryGetValue(term, out PropertyConfiguration value) ? value : 
                     Properties[AllTerms];
             }
             internal void AddUsing(string namespaceName)
@@ -50,7 +49,7 @@ namespace DwC_A.Interactive.Mapping
             }
         }
 
-        private GeneratorConfiguration config = new GeneratorConfiguration();
+        private readonly GeneratorConfiguration config = new();
 
         public GeneratorConfigurationBuilder WithNamespace(string namespaceName)
         {

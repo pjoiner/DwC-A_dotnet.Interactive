@@ -60,11 +60,11 @@ namespace DwC_A.Interactive.Commands
             IFileReader fileReader, 
             IGeneratorConfiguration config)
         {
-            var classGenerator = new ClassGenerator();
             var className = Path.GetFileNameWithoutExtension(fileReader.FileName);
             className = char.ToUpper(className[0]) + className[1..];
             context.Display($"Generating class {className}", new[] { "text/html" });
-            var source = classGenerator.GenerateFile(fileReader.FileMetaData, config);
+            var source = new ClassGenerator()
+                .GenerateFile(fileReader.FileMetaData, config);
             var result = await context.HandlingKernel.SubmitCodeAsync(source);
             result.KernelEvents.Subscribe((ev) => { }, (ex) =>
             {
