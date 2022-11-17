@@ -15,7 +15,7 @@ To import this library into a notbook use the `#r` magic command as follows.
 
 ## Binder
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/pjoiner/DwC-A_dotnet.Interactive/tree/v0.1.10-Pre)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/pjoiner/DwC-A_dotnet.Interactive/HEAD)
 
 Click on the button to see an example notebook with a sample dataset.
 
