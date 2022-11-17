@@ -1,7 +1,6 @@
 ﻿using Microsoft.DotNet.Interactive;
 using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
 
 namespace DwC_A.Interactive.Commands
 {
@@ -9,10 +8,10 @@ namespace DwC_A.Interactive.Commands
     {
         public TermsCommand() : base("#!terms", "Display Darwin Core standard terms")
         {
-            Handler = CommandHandler.Create((KernelInvocationContext invocationContext) =>
+            System.CommandLine.Handler.SetHandler(this, (invocationContext) =>
             {
                 var defaultTerms = new DefaultTerms();
-                invocationContext.Display(defaultTerms);
+                KernelInvocationContext.Current.Display(defaultTerms);
             });
         }
     }

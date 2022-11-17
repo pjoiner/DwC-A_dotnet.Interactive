@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Core.DwC_A;
 using Core.DwC_A.Meta;
 using DwC_A.Interactive.Formatters;
-using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Collections.Generic;
 using DwC_A.Interactive.Commands;
 using DwC_A.Config;

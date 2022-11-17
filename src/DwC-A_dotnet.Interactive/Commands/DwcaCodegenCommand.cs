@@ -3,13 +3,12 @@
 using Core::DwC_A;
 using DwC_A.Config;
 using DwC_A.Generator;
+using DwC_A.Interactive.Extensions;
 using DwC_A.Interactive.Mapping;
 using Microsoft.DotNet.Interactive;
 using Microsoft.DotNet.Interactive.Events;
-using Microsoft.DotNet.Interactive.ValueSharing;
 using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -20,47 +19,52 @@ namespace DwC_A.Interactive.Commands
         public DwcaCodegenCommand()
             : base("#!dwca-codegen", "Generate strongly typed class files for Darwin Core Archive")
         {
-            AddArgument(new Argument<string>()
+            var archivePathArg = new Argument<string>()
             {
                 Name = "archivePath",
                 Description = "Path to archive folder or zip file"
-            });
+            };
+            AddArgument(archivePathArg);
 
-            AddOption(new Option<string>(
-                aliases: new[] {"-c", "--configName"},
+            var cfgOption = new Option<string>(
+                aliases: new[] { "-c", "--configName" },
                 description: "Name of configuration variable",
                 getDefaultValue: () => ""
-            ));
+            );
+            AddOption(cfgOption);
 
-            Handler = CommandHandler.Create<KernelInvocationContext, string, string>((Func<KernelInvocationContext, string, string, Task>)(async (context, archivePath, configName) =>
+            System.CommandLine.Handler.SetHandler(this,async (context) =>
             {
+                var archivePath = context.ParseResult.GetValueForArgument(archivePathArg);
+                var configName = context.ParseResult.GetValueForOption(cfgOption);
                 var archive = new ArchiveReader(archivePath);
 
-                var csharpKernel = (ISupportGetValue)context.HandlingKernel.FindKernel("csharp");
-                if (!csharpKernel.TryGetValue<IGeneratorConfiguration>(configName, out IGeneratorConfiguration config))
-                {
-                    config = new GeneratorConfigurationBuilder().Build();
-                }
-                context.Display($"Opening archive {archive.FileName} using configuration", new[] { "text/html" });
-                context.Display(config, new[] { "text/html" });
+                var csharpKernel = KernelInvocationContext.Current.HandlingKernel.FindKernelByName("csharp");
+                var (success, value) = await csharpKernel.TryRequestValueAsync(configName);
+                IGeneratorConfiguration config = success ? 
+                    value.Value as IGeneratorConfiguration : 
+                    null ?? 
+                    new GeneratorConfigurationBuilder().Build();
+                KernelInvocationContext.Current.Display($"Opening archive {archive.FileName} using configuration", new[] { "text/html" });
+                KernelInvocationContext.Current.Display(config, new[] { "text/html" });
 
-                await GenerateClass(context, archive.CoreFile, config);
-                foreach(var extension in archive.Extensions.GetFileReaders())
+                await GenerateClass(KernelInvocationContext.Current, archive.CoreFile, config);
+                foreach (var extension in archive.Extensions.GetFileReaders())
                 {
-                    await GenerateClass(context, extension, config);
+                    await GenerateClass(KernelInvocationContext.Current, extension, config);
                 }
-            }));
+            });
         }
 
         private static async Task GenerateClass(KernelInvocationContext context, 
             IFileReader fileReader, 
             IGeneratorConfiguration config)
         {
-            var classGenerator = new ClassGenerator();
             var className = Path.GetFileNameWithoutExtension(fileReader.FileName);
-            className = char.ToUpper(className[0]) + className.Substring(1);
+            className = char.ToUpper(className[0]) + className[1..];
             context.Display($"Generating class {className}", new[] { "text/html" });
-            var source = classGenerator.GenerateFile(fileReader.FileMetaData, config);
+            var source = new ClassGenerator()
+                .GenerateFile(fileReader.FileMetaData, config);
             var result = await context.HandlingKernel.SubmitCodeAsync(source);
             result.KernelEvents.Subscribe((ev) => { }, (ex) =>
             {

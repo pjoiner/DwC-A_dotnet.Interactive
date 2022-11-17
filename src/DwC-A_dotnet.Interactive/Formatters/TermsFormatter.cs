@@ -25,7 +25,7 @@ namespace DwC_A.Interactive.Formatters
             foreach(var field in typeof(Terms).GetFields())
             {
                 var value = field.GetValue(null).ToString();
-                var description = dictionary.ContainsKey(value) ? dictionary[value] : "";
+                var description = dictionary.TryGetValue(value, out string descOut) ? descOut : "";
                 rows.Add(tr(new[]
                 {
                     td(field.Name),
