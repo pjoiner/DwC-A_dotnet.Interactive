@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <RootNamespace>DwC_A.Interactive</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Copyright © Paul Joiner 2021</Copyright>
@@ -36,7 +36,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="$(OutputPath)/DwC-A_dotnet.Interactive.dll" Pack="true" PackagePath="interactive-extensions/dotnet" />
+    <None Include="$(OutputPath)/net6.0/DwC-A_dotnet.Interactive.dll" Pack="true" PackagePath="interactive-extensions/dotnet" />
     <None Include="..\..\LICENSE"  Pack="true" PackagePath="\" />
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
