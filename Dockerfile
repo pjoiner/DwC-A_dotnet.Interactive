@@ -1,7 +1,7 @@
 # See this for running locally
 # https://mybinder.readthedocs.io/en/latest/tutorials/dockerfile.html
 
-FROM jupyter/base-notebook:latest
+FROM jupyter/base-notebook:ubuntu-20.04
 
 # Install .NET CLI dependencies
 
