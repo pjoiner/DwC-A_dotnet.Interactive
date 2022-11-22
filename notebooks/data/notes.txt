@@ -1,0 +1,2 @@
+This is file containing notes that may be added to an archive.
+See notebook 08_CreateArchive.ipynb for more details.
