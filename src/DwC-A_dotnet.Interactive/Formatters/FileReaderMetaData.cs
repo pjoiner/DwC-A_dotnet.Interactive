@@ -1,10 +1,9 @@
 ﻿extern alias Core;
+using Core.DwC_A;
+using Core.DwC_A.Terms;
 using Microsoft.AspNetCore.Html;
 using System.Collections.Generic;
 using System.IO;
-using Core.DwC_A;
-using Core.DwC_A.Terms;
-
 using static Microsoft.DotNet.Interactive.Formatting.PocketViewTags;
 
 namespace DwC_A.Interactive.Formatters
@@ -27,7 +26,7 @@ namespace DwC_A.Interactive.Formatters
             foreach (var field in fileReader.FileMetaData.Fields)
             {
                 var name = span(Terms.ShortName(field.Term));
-                if(field.IndexSpecified && fileReader.FileMetaData.Id.Index == field.Index)
+                if (field.IndexSpecified && fileReader.FileMetaData.Id.Index == field.Index)
                 {
                     name = span(name, sup(b("*")));
                 }
@@ -45,7 +44,7 @@ namespace DwC_A.Interactive.Formatters
             var t = table(
                 thead(header),
                 tbody(rows),
-                tfoot(tr(td(span(sup(b("*")), "Indicates index column"))))
+                tfoot(tr(td[colspan: "100%"](span(sup(b("*")), "Indicates index column"))))
             );
             writer.Write(t);
         }

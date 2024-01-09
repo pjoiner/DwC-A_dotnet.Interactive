@@ -27,7 +27,7 @@ namespace DwC_A.Interactive.Mapping
             public IList<string> Usings => usings.ToList();
             public PropertyConfiguration GetPropertyConfiguration(string term)
             {
-                return Properties.TryGetValue(term, out PropertyConfiguration value) ? value : 
+                return Properties.TryGetValue(term, out PropertyConfiguration value) ? value :
                     Properties[AllTerms];
             }
             internal void AddUsing(string namespaceName)
@@ -36,10 +36,7 @@ namespace DwC_A.Interactive.Mapping
             }
             internal void AddProperty(string term, string typeName, bool include = true, string propertyName = null)
             {
-                if (properties.ContainsKey(term))
-                {
-                    properties.Remove(term);
-                }
+                properties.Remove(term);
                 properties.Add(term, new PropertyConfiguration()
                 {
                     TypeName = typeName,
@@ -84,7 +81,7 @@ namespace DwC_A.Interactive.Mapping
         public GeneratorConfigurationBuilder WithMapMethod(bool mapMethod)
         {
             config.MapMethod = mapMethod;
-            if(mapMethod)
+            if (mapMethod)
             {
                 config.AddUsing(CoreNamespace);
                 config.AddUsing(ExtensionNamespace);
