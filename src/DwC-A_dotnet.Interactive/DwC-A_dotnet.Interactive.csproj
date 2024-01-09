@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <RootNamespace>DwC_A.Interactive</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Copyright © Paul Joiner 2021</Copyright>
@@ -11,22 +11,23 @@
     <PackageTags>DwC-A darwin-core Biodiversity</PackageTags>
     <Authors>Paul Joiner</Authors>
     <Company>Paul Joiner</Company>
-    <Version>0.1.10-Pre</Version>
+    <Version>0.1.11-Pre</Version>
     <Description>.NET Interactive Extensions for Darwin Core Archive file reader</Description>
     <AssemblyVersion>0.1.10.0</AssemblyVersion>
     <FileVersion>0.1.10.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <NoWarn>NU5100</NoWarn>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DwC-A_dotnet" Version="0.7.0">
+    <PackageReference Include="DwC-A_dotnet" Version="0.8.0">
       <Aliases>Core</Aliases>
     </PackageReference>
     <PackageReference Include="DwC-A_dotnet.Mapping" Version="0.6.3" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageReference Include="microsoft.dotnet.interactive" Version="1.0.0-beta.22553.7" />
+    <PackageReference Include="microsoft.dotnet.interactive" Version="1.0.0-beta.23611.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,10 +35,14 @@
       <_Parameter1>UnitTests</_Parameter1>
     </AssemblyAttribute>    
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(OutputPath)/net8.0/DwC-A_dotnet.Interactive.dll" Pack="true" PackagePath="interactive-extensions/dotnet" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
   
   <ItemGroup>
-    <None Include="$(OutputPath)/net6.0/DwC-A_dotnet.Interactive.dll" Pack="true" PackagePath="interactive-extensions/dotnet" />
-    <None Include="..\..\LICENSE"  Pack="true" PackagePath="\" />
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>
